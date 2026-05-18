@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "stepis.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/stepis.html" },
+    { "src": "/stepis", "dest": "/stepis.html" }
+  ]
+}
