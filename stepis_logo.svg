@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;display=swap');
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="320" height="80" fill="#08080F" rx="8"/>
+  
+  <!-- Left accent bar -->
+  <rect x="0" y="0" width="4" height="80" fill="#4A7FFF" rx="2"/>
+  
+  <!-- STEPIS text -->
+  <text x="24" y="58" 
+        font-family="'Bebas Neue', 'Liberation Sans', Arial Black, sans-serif" 
+        font-weight="900"
+        font-size="56" 
+        letter-spacing="6"
+        fill="#EDEDED">STEPIS</text>
+  
+  <!-- Blue dot -->
+  <circle cx="289" cy="46" r="7" fill="#4A7FFF"/>
+  
+  <!-- Tagline -->
+  <text x="24" y="74" 
+        font-family="'DM Sans', 'Liberation Sans', Arial, sans-serif"
+        font-size="9"
+        letter-spacing="2.5"
+        fill="#888899">DIGITAL · AUVERGNE-RHÔNE-ALPES</text>
+</svg>

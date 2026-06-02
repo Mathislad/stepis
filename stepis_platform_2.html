@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stepis — Plateforme IA pour commerces & TPE | Fidélisation, Réservation, Automatisation</title>
+<meta name="description" content="Stepis : solution SaaS IA complète pour commerces et TPE. Site internet IA, fidélisation client, réservation en ligne, répondeur vocal 24/7, comptabilité automatisée. Dès 149€/mois.">
+<meta name="keywords" content="SaaS IA PME, fidélisation client, réservation en ligne, répondeur IA, automatisation marketing, site internet IA, Stepis">
+<meta name="author" content="Stepis — Mathis Ladouceur">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Stepis — Plateforme IA pour commerces & TPE">
+<meta property="og:description" content="Site IA, fidélisation, réservation, répondeur vocal 24/7. Tout automatisé dès 149€/mois.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://stepis.fr">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://stepis.fr">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Stepis","description":"Plateforme SaaS IA pour commerces et TPE","applicationCategory":"BusinessApplication","offers":[{"@type":"Offer","name":"Starter","price":"149","priceCurrency":"EUR"},{"@type":"Offer","name":"Business","price":"299","priceCurrency":"EUR"},{"@type":"Offer","name":"Pro","price":"599","priceCurrency":"EUR"}],"provider":{"@type":"Organization","name":"Stepis","url":"https://stepis.fr","email":"ladouceurmathis.contact@gmail.com"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080b;--bg2:#0f0f13;--bg3:#16161b;--bg4:#1e1e26;
+  --border:#1e1e26;--b2:#28282f;--b3:#323239;
+  --cream:#f2f1ed;--c2:#b8b7b2;--muted:#555560;--m2:#888892;
+  --y:#e8ff47;--yd:rgba(232,255,71,.1);--yb:rgba(232,255,71,.28);
+  --gn:#22c55e;--gnb:rgba(34,197,94,.12);
+  --bl:#3b82f6;--blb:rgba(59,130,246,.12);
+  --pu:#a855f7;--pub:rgba(168,85,247,.12);
+  --or:#f97316;--orb:rgba(249,115,22,.12);
+  --e1:cubic-bezier(.22,.68,0,1.2);
+  --e2:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px;}
+
+/* ═══ CURSOR (desktop only) ═══ */
+#cur-dot,#cur-ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);}
+#cur-dot{width:8px;height:8px;background:var(--y);mix-blend-mode:difference;}
+#cur-ring{width:36px;height:36px;border:1px solid rgba(232,255,71,.5);transition:width .18s,height .18s;}
+@media(hover:none){#cur-dot,#cur-ring{display:none;}}
+
+/* noise */
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.022;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);background:rgba(8,8,11,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:7px;}
+.logo .y{color:var(--y);}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nbtn{font-size:12px;font-weight:500;color:var(--m2);padding:7px 13px;border-radius:100px;border:none;background:transparent;transition:color .15s,background .15s;}
+.nbtn:hover,.nbtn.on{color:var(--cream);}
+.nbtn.on{background:var(--bg3);}
+.ncta{margin-left:6px;padding:8px 18px;background:var(--y);color:var(--bg);font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:100px;border:none;transition:opacity .15s;}
+.ncta:hover{opacity:.85;}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:8px;}
+.ham span{display:block;width:22px;height:1.5px;background:var(--c2);transition:transform .25s,opacity .25s;}
+@media(max-width:680px){
+  .nav-links{position:fixed;top:58px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--b2);flex-direction:column;align-items:stretch;padding:10px;gap:3px;transform:translateY(-110%);opacity:0;transition:transform .3s var(--e2),opacity .3s;}
+  .nav-links.open{transform:translateY(0);opacity:1;}
+  .nbtn{padding:11px 14px;border-radius:9px;}
+  .ncta{margin:4px 0 0;text-align:center;}
+  .ham{display:flex;}
+  .ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+  .ham.open span:nth-child(2){opacity:0;}
+  .ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+}
+
+/* ═══ PAGE SYSTEM ═══ */
+.pg{display:none;min-height:100vh;}
+.pg.on{display:block;}
+@keyframes pgIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.pg-enter{animation:pgIn .5s var(--e2) both;}
+
+/* ═══ UTILS ═══ */
+.w{max-width:1140px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+.sec{padding:clamp(60px,9vw,110px) 0;}
+.sec-alt{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.rv{opacity:0;transform:translateY(36px);transition:opacity .65s var(--e2),transform .65s var(--e2);}
+.rv.in{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+.lbl{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:8px;}
+.lbl::before{content:'';width:18px;height:1px;background:currentColor;}
+.h1,.h2,.h3{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-.03em;line-height:.96;text-transform:uppercase;}
+.h1{font-size:clamp(46px,8.5vw,100px);}
+.h2{font-size:clamp(32px,5vw,58px);}
+.h3{font-size:clamp(22px,3.5vw,38px);}
+.ya{color:var(--y);}
+.bt{font-size:clamp(14px,1.5vw,16px);color:var(--m2);line-height:1.7;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:100px;border:none;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;transition:opacity .15s,transform .15s;}
+.btn:hover{opacity:.88;transform:scale(.97);}
+.bty{background:var(--y);color:var(--bg);}
+.bty:hover{box-shadow:0 0 28px rgba(232,255,71,.25);}
+.btg{background:transparent;color:var(--c2);border:1px solid var(--b3);}
+.btg:hover{background:var(--bg3);color:var(--cream);}
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-radius:100px;padding:4px 11px;border:1px solid;}
+.pg{color:var(--gn);background:var(--gnb);border-color:rgba(34,197,94,.2);}
+.pb{color:#60a5fa;background:var(--blb);border-color:rgba(59,130,246,.2);}
+.pp{color:#c084fc;background:var(--pub);border-color:rgba(168,85,247,.2);}
+.py{color:var(--bg);background:var(--y);border-color:transparent;}
+.po{color:var(--or);background:var(--orb);border-color:rgba(249,115,22,.2);}
+
+/* ═══ HOME HERO ═══ */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:58px;position:relative;overflow:hidden;}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:clamp(40px,6vw,72px) clamp(40px,6vw,72px);opacity:.4;mask-image:radial-gradient(ellipse 90% 65% at 50% 0%,black,transparent);}
+.hglow{position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:70vw;height:70vw;max-width:800px;border-radius:50%;background:radial-gradient(circle,rgba(232,255,71,.055),transparent 65%);pointer-events:none;}
+.hero-in{position:relative;z-index:2;padding:clamp(40px,7vh,80px) 0;}
+.heyebrow{display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+.hpulse{width:7px;height:7px;border-radius:50%;background:var(--y);animation:hpuls 2s infinite;}
+@keyframes hpuls{0%,100%{box-shadow:0 0 0 0 rgba(232,255,71,.5);}70%{box-shadow:0 0 0 10px rgba(232,255,71,0);}}
+.htitle{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-.04em;line-height:.93;text-transform:uppercase;font-size:clamp(50px,9vw,108px);margin-bottom:28px;}
+.htitle .stroke{display:block;-webkit-text-stroke:1px var(--b2);color:transparent;transition:color .3s,-webkit-text-stroke .3s;}
+.htitle .stroke:hover{color:var(--cream);-webkit-text-stroke:1px transparent;}
+.hrow{display:flex;align-items:flex-start;gap:clamp(20px,4vw,64px);margin-bottom:36px;flex-wrap:wrap;}
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;flex:1;min-width:220px;}
+.hst{background:var(--bg2);padding:16px 12px;text-align:center;}
+.hst .n{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,30px);font-weight:800;color:var(--y);display:block;line-height:1;}
+.hst .l{font-size:10px;color:var(--muted);margin-top:3px;}
+.hbtns{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.hscroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:7px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);animation:sbounce 2.5s ease-in-out infinite;}
+@keyframes sbounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+.sline{width:1px;height:36px;background:linear-gradient(to bottom,var(--muted),transparent);}
+
+/* TICKER */
+.ticker{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);overflow:hidden;padding:12px 0;}
+.ttrack{display:flex;white-space:nowrap;animation:tickmove 26s linear infinite;}
+.ttrack:hover{animation-play-state:paused;}
+.titem{display:inline-flex;align-items:center;gap:12px;padding:0 26px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.tsep{color:var(--y);}
+@keyframes tickmove{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* PROBLEMS */
+.prgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:44px;}
+@media(max-width:580px){.prgrid{grid-template-columns:1fr;}}
+.prcard{background:var(--bg2);padding:clamp(18px,3vw,28px);position:relative;overflow:hidden;transition:background .2s;}
+.prcard:hover{background:var(--bg3);}
+.prcard::after{content:'';position:absolute;top:0;left:0;width:2px;height:0;background:var(--y);transition:height .4s var(--e2);}
+.prcard:hover::after{height:100%;}
+.prnum{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;color:var(--y);margin-bottom:12px;display:block;}
+.prcard h3{font-family:'Syne',sans-serif;font-size:clamp(13px,2vw,16px);font-weight:700;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:7px;}
+.prcard p{font-size:12.5px;color:var(--m2);line-height:1.6;}
+
+/* FEATURES */
+.flayout{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,5vw,72px);align-items:start;margin-top:52px;}
+@media(max-width:800px){.flayout{grid-template-columns:1fr;}}
+.fitm{border-bottom:1px solid var(--border);padding:18px 0;transition:padding .2s;cursor:pointer;}
+.fitm:first-child{border-top:1px solid var(--border);}
+.fitm:hover{padding:18px 0 18px 6px;}
+.ftop{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.ftop h4{font-family:'Syne',sans-serif;font-size:clamp(13px,1.8vw,15px);font-weight:700;text-transform:uppercase;letter-spacing:.02em;}
+.farr{font-size:16px;color:var(--muted);transition:transform .25s;}
+.fitm.open .farr{transform:rotate(45deg);color:var(--y);}
+.fbody{font-size:12.5px;color:var(--m2);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .4s var(--e2),opacity .3s,padding .3s;opacity:0;padding-top:0;}
+.fitm.open .fbody{max-height:100px;opacity:1;padding-top:9px;}
+.fvisual{position:sticky;top:70px;}
+.fvcard{background:var(--bg2);border:1px solid var(--b2);border-radius:14px;overflow:hidden;}
+.fvhd{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.fvdots span{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:3px;}
+.fvdots .r{background:#ff5f57;}.fvdots .a{background:#febc2e;}.fvdots .g{background:#28c840;}
+.fvtitle{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-left:6px;}
+.fvbody{padding:18px;}
+.fvmet{margin-bottom:12px;}
+.fvmet .ml{font-size:9.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+.fvmet .mv{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--y);}
+.fvbar{height:3px;background:var(--b2);border-radius:2px;overflow:hidden;margin-top:5px;}
+.fvfill{height:100%;background:linear-gradient(90deg,var(--y),rgba(232,255,71,.3));border-radius:2px;}
+.fvlist{list-style:none;display:flex;flex-direction:column;gap:7px;border-top:1px solid var(--border);padding-top:14px;margin-top:12px;}
+.fvlist li{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--m2);}
+.fvck{width:14px;height:14px;border-radius:3px;background:var(--yd);color:var(--y);display:flex;align-items:center;justify-content:center;font-size:7px;flex-shrink:0;}
+
+/* CTA BANNER */
+.ctaban{background:var(--y);border-radius:18px;padding:clamp(36px,5vw,60px);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;}
+@media(max-width:580px){.ctaban{grid-template-columns:1fr;}}
+.ctaban h2{font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,42px);font-weight:800;color:var(--bg);letter-spacing:-.025em;text-transform:uppercase;line-height:1.02;}
+.ctaban p{font-size:13px;color:rgba(10,10,12,.55);margin-top:7px;}
+.btdark{background:var(--bg);color:var(--y);padding:15px 30px;font-size:12px;}
+.btdark:hover{box-shadow:0 8px 28px rgba(0,0,0,.4);}
+.ctamail{font-size:11px;color:rgba(10,10,12,.5);font-family:'Syne',sans-serif;font-weight:600;margin-top:8px;display:block;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:clamp(36px,5vw,56px) 0 clamp(20px,3vw,28px);}
+.ftgrid{display:grid;grid-template-columns:1.8fr 1fr 1fr;gap:clamp(20px,4vw,48px);margin-bottom:clamp(28px,4vw,40px);}
+@media(max-width:600px){.ftgrid{grid-template-columns:1fr;gap:20px;}}
+.ftbrand .fn{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.ftbrand .fn span{color:var(--y);}
+.ftbrand p{font-size:12px;color:var(--muted);line-height:1.65;}
+.ftcol h6{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;}
+.ftcol ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.ftcol button,.ftcol a{font-size:12px;color:var(--m2);background:none;border:none;text-align:left;padding:0;transition:color .15s;}
+.ftcol button:hover,.ftcol a:hover{color:var(--cream);}
+.ftbot{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ftbot p{font-size:11px;color:var(--muted);}
+
+/* ═══ PRICING PAGE ═══ */
+.phead{text-align:center;padding:clamp(72px,10vh,110px) 0 clamp(32px,5vh,56px);}
+.ptoggle{display:inline-flex;align-items:center;gap:11px;background:var(--bg2);border:1px solid var(--b2);border-radius:100px;padding:5px 5px 5px 14px;font-size:12px;margin-top:24px;}
+.ptl{color:var(--m2);}
+.ptl.on{color:var(--cream);font-weight:600;}
+.togw{position:relative;width:42px;height:22px;}
+.togw input{opacity:0;width:0;height:0;position:absolute;}
+.togsl{position:absolute;inset:0;background:var(--b2);border-radius:100px;transition:background .2s;cursor:pointer;}
+.togsl::before{content:'';position:absolute;left:2px;top:2px;width:18px;height:18px;background:var(--cream);border-radius:50%;transition:transform .22s;box-shadow:0 1px 4px rgba(0,0,0,.5);}
+input:checked+.togsl{background:var(--y);}
+input:checked+.togsl::before{transform:translateX(20px);background:var(--bg);}
+.savebadge{font-size:10px;font-weight:700;color:var(--bg);background:var(--y);border-radius:100px;padding:3px 9px;margin-left:4px;}
+
+/* PRICE CARDS */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:12px;}
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;position:relative;transition:border-color .2s,box-shadow .2s,transform .2s;}
+.pcard:hover{transform:translateY(-5px);box-shadow:0 20px 56px rgba(0,0,0,.5);}
+.pcard.feat{border-color:var(--yb);}
+.pcard.feat:hover{border-color:var(--y);box-shadow:0 20px 56px rgba(232,255,71,.07);}
+.pribb{position:absolute;top:12px;right:-22px;background:var(--y);color:var(--bg);font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:4px 26px;transform:rotate(45deg);}
+.addtag{position:absolute;top:10px;left:10px;font-family:'Syne',sans-serif;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--orb);color:var(--or);border:1px solid rgba(249,115,22,.25);padding:3px 8px;border-radius:100px;}
+.pchead{padding:20px 18px 16px;border-bottom:1px solid var(--border);}
+.pcname{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;margin-bottom:5px;}
+.pcdesc{font-size:11.5px;color:var(--m2);line-height:1.5;margin-bottom:13px;min-height:32px;}
+.pcprice{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.025em;line-height:1;transition:opacity .18s;}
+.pcprice.fade{opacity:0;}
+.pcper{font-size:11px;color:var(--muted);}
+.pcsetup{font-size:11px;color:var(--muted);margin-top:3px;}
+.pcsetup b{color:var(--m2);}
+.pcbody{padding:14px 18px 18px;flex:1;display:flex;flex-direction:column;}
+.pcmini{font-family:'Syne',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.pclist{list-style:none;display:flex;flex-direction:column;gap:5px;flex:1;margin-bottom:13px;}
+.pclist li{display:flex;gap:7px;font-size:11.5px;color:var(--m2);line-height:1.4;}
+.pck{width:13px;height:13px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7px;flex-shrink:0;margin-top:2px;}
+.pck-s{background:var(--gnb);color:var(--gn);}
+.pck-b{background:var(--blb);color:#60a5fa;}
+.pck-p{background:var(--pub);color:#c084fc;}
+.pck-v{background:var(--orb);color:var(--or);}
+.pccta{width:100%;padding:11px;border-radius:8px;border:none;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.pccta:hover{opacity:.85;}
+.pcard:hover .pccta{gap:9px;}
+.cta-s{background:var(--gnb);color:var(--gn);border:1px solid rgba(34,197,94,.2);}
+.cta-b{background:var(--y);color:var(--bg);}
+.cta-p{background:var(--pub);color:#c084fc;border:1px solid rgba(168,85,247,.2);}
+.cta-v{background:var(--or);color:var(--bg);}
+
+/* DRAWER */
+.overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+.overlay.on{opacity:1;visibility:visible;}
+.drawer{position:fixed;top:0;right:0;z-index:900;height:100vh;width:min(660px,100vw);background:var(--bg2);border-left:1px solid var(--b2);box-shadow:-40px 0 100px rgba(0,0,0,.8);transform:translateX(105%);transition:transform .42s var(--e2);display:flex;flex-direction:column;}
+.drawer.on{transform:translateX(0);}
+.drh{position:sticky;top:0;z-index:5;padding:18px 26px;background:rgba(15,15,19,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.drtier{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:7px;display:inline-flex;align-items:center;gap:5px;border-radius:100px;padding:3px 10px;}
+.drname{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.02em;text-transform:uppercase;}
+.drprice{font-size:12px;color:var(--m2);margin-top:5px;}
+.drprice b{color:var(--cream);font-family:'Syne',sans-serif;font-size:14px;}
+.drclose{width:32px;height:32px;border-radius:50%;border:1px solid var(--b2);background:var(--bg3);font-size:14px;color:var(--m2);display:flex;align-items:center;justify-content:center;transition:background .15s,transform .2s,color .15s;flex-shrink:0;}
+.drclose:hover{background:var(--b2);color:var(--cream);transform:rotate(90deg);}
+.drbody{overflow-y:auto;padding:22px 26px;flex:1;}
+.drbody::-webkit-scrollbar{width:4px;}
+.drbody::-webkit-scrollbar-thumb{background:var(--b2);}
+.dsec{margin-bottom:26px;}
+.dsh{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:8px;color:var(--m2);}
+.dsn{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--bg);flex-shrink:0;}
+.dsi{font-size:12px;color:var(--m2);line-height:1.6;margin-bottom:11px;padding-left:26px;}
+.dcg{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.dc{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:11px;}
+.dc .di{font-size:14px;margin-bottom:5px;}
+.dc h5{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.dc p{font-size:11px;color:var(--m2);line-height:1.5;}
+.dflow{padding-left:26px;}
+.dfs{padding:0 0 14px 18px;border-left:1px solid var(--border);position:relative;}
+.dfs:last-child{border-color:transparent;padding-bottom:0;}
+.dfs::before{content:'';position:absolute;left:-4px;top:3px;width:7px;height:7px;border-radius:50%;background:var(--bg2);border:2px solid currentColor;}
+.dfs h4{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.dfs p{font-size:11px;color:var(--m2);line-height:1.5;}
+.dcompat{background:var(--bg3);border:1px solid var(--border);border-radius:9px;overflow:hidden;}
+.dcr{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border);font-size:11.5px;}
+.dcr:last-child{border:none;}
+.dcr .dt{flex:1;font-weight:600;color:var(--cream);}
+.dbd{font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:100px;}
+.dok{background:var(--gnb);color:var(--gn);}
+.dmi{background:rgba(245,158,11,.1);color:#fbbf24;}
+.dcr .dn{flex:1.4;font-size:10px;color:var(--muted);text-align:right;}
+.dresg{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.drc{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:13px;}
+.drv{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:3px;}
+.drl{font-size:11px;color:var(--m2);line-height:1.4;}
+.drsg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.drs{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px 8px;text-align:center;}
+.drsvl{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;display:block;margin-bottom:2px;}
+.drsll{font-size:9.5px;color:var(--muted);}
+.dinc{list-style:none;display:flex;flex-direction:column;gap:8px;padding-left:26px;}
+.dinc li{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;}
+.dck{width:13px;height:13px;border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:7px;}
+.dfn{font-weight:600;color:var(--cream);}
+.dfd{display:block;font-size:11px;color:var(--m2);margin-top:1px;}
+.dtags{display:flex;flex-wrap:wrap;gap:5px;padding-left:26px;}
+.dtag{font-size:10px;font-weight:500;padding:4px 10px;border-radius:100px;border:1px solid var(--b2);color:var(--m2);background:var(--bg3);}
+.drfoot{font-size:10px;color:var(--muted);margin-top:12px;text-align:center;font-style:italic;line-height:1.6;}
+.drft{position:sticky;bottom:0;padding:13px 26px;background:rgba(15,15,19,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;}
+.dfpa{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;}
+.dfps{font-size:10px;color:var(--muted);}
+.dfcta{padding:10px 20px;border-radius:8px;border:none;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:opacity .15s;}
+.dfcta:hover{opacity:.85;}
+@media(max-width:560px){.dcg,.dresg{grid-template-columns:1fr;}.drbody{padding:16px 18px;}.drh{padding:14px 18px;}}
+
+/* ═══ ABOUT PAGE ═══ */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center;margin-top:48px;}
+@media(max-width:700px){.agrid{grid-template-columns:1fr;}}
+.atext p{font-size:clamp(13px,1.5vw,15px);color:var(--m2);line-height:1.75;margin-bottom:14px;}
+.atext p b{color:var(--cream);}
+.avals{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+.aval{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;}
+.aval .ico{font-size:18px;}
+.aval h5{font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;margin-bottom:2px;}
+.aval p{font-size:11.5px;color:var(--m2);line-height:1.5;}
+.acard{background:var(--bg2);border:1px solid var(--b2);border-radius:18px;padding:clamp(22px,3vw,36px);position:relative;overflow:hidden;}
+.acard::before{content:'';position:absolute;top:-30%;right:-10%;width:50%;height:60%;background:radial-gradient(circle,var(--yd),transparent);pointer-events:none;}
+.acard .bigny{font-family:'Syne',sans-serif;font-size:clamp(44px,7vw,72px);font-weight:800;color:var(--y);line-height:1;letter-spacing:-.04em;}
+.acard h3{font-family:'Syne',sans-serif;font-size:clamp(16px,2.5vw,22px);font-weight:800;text-transform:uppercase;margin-bottom:10px;}
+.acard p{font-size:12.5px;color:var(--m2);line-height:1.65;}
+.acard .atags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;}
+.atag{font-size:10px;font-weight:500;padding:4px 11px;border-radius:100px;border:1px solid var(--b2);color:var(--m2);background:var(--bg3);}
+
+/* ═══ SIMULATOR PAGE ═══ */
+.shead{text-align:center;padding:clamp(72px,10vh,110px) 0 clamp(32px,5vh,52px);}
+.slayout{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+@media(max-width:860px){.slayout{grid-template-columns:1fr;}}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:clamp(16px,3vw,24px);}
+.pnh{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:8px;color:var(--m2);}
+.pnn{width:19px;height:19px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.pns{font-size:12px;color:var(--muted);padding-left:27px;margin-bottom:16px;line-height:1.5;}
+.field{margin-bottom:15px;}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--c2);margin-bottom:5px;}
+.fdesc{font-size:11px;color:var(--muted);display:block;margin-top:2px;}
+.ibox{display:flex;align-items:center;border:1.5px solid var(--b2);border-radius:8px;background:var(--bg3);transition:border-color .15s;}
+.ibox:focus-within{border-color:var(--y);}
+.ibox input{flex:1;border:none;outline:none;padding:11px 12px;font-size:16px;font-family:'Syne',sans-serif;font-weight:700;background:transparent;color:var(--cream);}
+.ibox .unit{padding:0 11px;font-size:11px;color:var(--muted);border-left:1px solid var(--border);align-self:stretch;display:flex;align-items:center;white-space:nowrap;}
+.sgblk{margin-bottom:15px;}
+.sghd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.sgnm{font-size:12px;font-weight:600;color:var(--c2);display:flex;align-items:center;gap:7px;}
+.sgnm .dot{width:8px;height:8px;border-radius:50%;}
+.dot-g{background:var(--gn);}.dot-a{background:#f59e0b;}.dot-r{background:#ef4444;}.dot-y{background:var(--y);}.dot-b{background:var(--bl);}
+.sgv{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;}
+.sgd{font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.4;}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:10px;background:var(--b2);outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--cream);border:2px solid var(--bg);box-shadow:0 2px 6px rgba(0,0,0,.5);}
+.tck{font-size:11px;padding:6px 10px;border-radius:7px;display:flex;justify-content:space-between;margin-top:4px;}
+.tok{background:rgba(34,197,94,.08);color:var(--gn);}
+.twrn{background:rgba(245,158,11,.08);color:#fbbf24;}
+.divsec{height:1px;background:var(--border);margin:16px 0;}
+.det{margin-top:4px;}
+.det summary{font-size:11px;color:var(--m2);cursor:pointer;font-weight:600;padding:5px 0;}
+.det .field{margin-top:10px;margin-bottom:10px;}
+.osgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px;}
+.osl{border:1.5px solid var(--b2);border-radius:9px;padding:11px 7px;text-align:center;cursor:pointer;background:var(--bg3);transition:all .15s;position:relative;}
+.osl:hover{transform:translateY(-2px);}
+.osl .on2{font-family:'Syne',sans-serif;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px;color:var(--c2);}
+.osl .op2{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--cream);}
+.osl .oper{font-size:9px;color:var(--muted);}
+.osl .ock{position:absolute;top:4px;right:6px;font-size:9px;opacity:0;transition:opacity .15s;}
+.osl.sel .ock{opacity:1;}
+.osl.sel-s{border-color:var(--gn);box-shadow:0 0 0 2px rgba(34,197,94,.1);}
+.osl.sel-s .ock{color:var(--gn);}
+.osl.sel-b{border-color:var(--y);box-shadow:0 0 0 2px var(--yd);}
+.osl.sel-b .ock{color:var(--y);}
+.osl.sel-p{border-color:var(--pu);box-shadow:0 0 0 2px rgba(168,85,247,.1);}
+.osl.sel-p .ock{color:var(--pu);}
+.ohint{font-size:11px;color:var(--muted);text-align:center;font-style:italic;margin-top:4px;}
+.varblk{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:13px;margin-top:10px;}
+.vartitle{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
+.varrow{display:flex;align-items:center;gap:9px;margin-bottom:7px;font-size:11.5px;}
+.varrow:last-child{margin-bottom:0;}
+.varlbl{flex:1;color:var(--m2);}
+.varbarw{flex:2;height:5px;background:var(--b2);border-radius:3px;overflow:hidden;}
+.varbar{height:100%;border-radius:3px;transition:width .6s var(--e2);}
+.varval{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;min-width:40px;text-align:right;}
+/* results */
+.rpanel{background:var(--bg);border:1px solid var(--b2);position:sticky;top:68px;}
+.bnum{text-align:center;padding:8px 0 4px;}
+.bnl{font-family:'Syne',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.bnv{font-family:'Syne',sans-serif;font-size:clamp(34px,5.5vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--y);}
+.bnm{font-size:11px;color:var(--muted);margin-top:4px;}
+.rssplit{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0;}
+.rsb{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px;}
+.rsb .rsl{font-size:10px;color:var(--muted);margin-bottom:4px;}
+.rsb .rsv{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;}
+.rsvy{color:var(--y);}
+.brrow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:12px;border-bottom:1px solid var(--border);}
+.brrow:last-child{border:none;}
+.brl{color:var(--m2);display:flex;align-items:center;gap:7px;}
+.brl .dot{width:7px;height:7px;border-radius:50%;}
+.bra{font-family:'Syne',sans-serif;font-weight:700;color:var(--gn);}
+.roiblk{margin-top:14px;background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.17);border-radius:11px;padding:14px;}
+.roit{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--y);margin-bottom:10px;}
+.roir{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--m2);}
+.roir b{color:var(--cream);font-family:'Syne',sans-serif;}
+.roinr{border-top:1px solid rgba(232,255,71,.17);margin-top:7px;padding-top:9px;font-size:13px;color:var(--cream);font-weight:600;}
+.roinr b{color:var(--y);font-size:15px;}
+.payblk{margin-top:12px;padding:11px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;}
+.payblk .pt{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.payblk .pr{display:flex;justify-content:space-between;font-size:12.5px;}
+.payblk .pv{font-family:'Syne',sans-serif;color:var(--y);font-weight:700;}
+.sbtns{display:flex;gap:7px;margin-top:14px;}
+.sbtns .btn{flex:1;justify-content:center;padding:9px 10px;font-size:10px;}
+.sdisc{font-size:10px;color:var(--muted);text-align:center;margin-top:14px;font-style:italic;line-height:1.6;}
+@media print{body{background:#fff;color:#000;}.overlay,.drawer,.sbtns,.ham,nav{display:none !important;}.rpanel{position:static;background:#fff;border:1px solid #ddd;}.bnv{color:green;}}
+</style>
+</head>
+<body>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="logo"><span class="y">⚡</span>Stepis</div>
+  <div class="nav-links" id="navlinks">
+    <button class="nbtn on" id="nb-home" onclick="goPage('home')">Accueil</button>
+    <button class="nbtn" id="nb-pricing" onclick="goPage('pricing')">Offres</button>
+    <button class="nbtn" id="nb-about" onclick="goPage('about')">À propos</button>
+    <button class="nbtn" id="nb-sim" onclick="goPage('sim')">Simulateur</button>
+    <button class="ncta" onclick="goPage('home');setTimeout(function(){document.getElementById('ctaanchor').scrollIntoView({behavior:'smooth'})},120)">Devis gratuit →</button>
+  </div>
+  <button class="ham" id="hamb" onclick="toggleHam()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ═══════════ PAGE HOME ═══════════ -->
+<div id="pg-home" class="pg on">
+  <section class="hero">
+    <div class="hgrid"></div>
+    <div class="hglow"></div>
+    <div class="w hero-in">
+      <div class="heyebrow rv">
+        <div class="hpulse"></div>
+        <span class="lbl">Plateforme SaaS IA — Commerces & TPE</span>
+      </div>
+      <div class="htitle rv d1">
+        VOTRE BUSINESS<br>
+        <span class="stroke">AUTOMATISÉ</span><br>
+        <span class="ya">MAINTENANT.</span>
+      </div>
+      <div class="hrow rv d2">
+        <p class="bt" style="max-width:380px;flex-shrink:0">Site IA, fidélisation, réservation 24/7, répondeur vocal, comptabilité automatisée. <strong style="color:var(--cream)">Tout-en-un dès 149€/mois.</strong></p>
+        <div class="hstats">
+          <div class="hst"><span class="n" id="cnt1">149€</span><span class="l">départ/mois</span></div>
+          <div class="hst"><span class="n" id="cnt2">6</span><span class="l">modules inclus</span></div>
+          <div class="hst"><span class="n" id="cnt3">5j</span><span class="l">mise en route</span></div>
+        </div>
+      </div>
+      <div class="hbtns rv d3">
+        <button class="btn bty" onclick="goPage('pricing')">Voir les offres →</button>
+        <button class="btn btg" onclick="goPage('sim')">Simuler mon ROI →</button>
+      </div>
+    </div>
+    <div class="hscroll"><div class="sline"></div>Scroll</div>
+  </section>
+
+  <div class="ticker">
+    <div class="ttrack">
+      <span class="titem">Site IA clé en main <span class="tsep">✦</span></span>
+      <span class="titem">Répondeur vocal 24/7 <span class="tsep">✦</span></span>
+      <span class="titem">Fidélisation automatisée <span class="tsep">✦</span></span>
+      <span class="titem">Réservation en ligne <span class="tsep">✦</span></span>
+      <span class="titem">Comptabilité & TVA auto <span class="tsep">✦</span></span>
+      <span class="titem">Marketing IA <span class="tsep">✦</span></span>
+      <span class="titem">Analytics avancés <span class="tsep">✦</span></span>
+      <span class="titem">Multi-sites <span class="tsep">✦</span></span>
+      <span class="titem">Site IA clé en main <span class="tsep">✦</span></span>
+      <span class="titem">Répondeur vocal 24/7 <span class="tsep">✦</span></span>
+      <span class="titem">Fidélisation automatisée <span class="tsep">✦</span></span>
+      <span class="titem">Réservation en ligne <span class="tsep">✦</span></span>
+      <span class="titem">Comptabilité & TVA auto <span class="tsep">✦</span></span>
+      <span class="titem">Marketing IA <span class="tsep">✦</span></span>
+      <span class="titem">Analytics avancés <span class="tsep">✦</span></span>
+      <span class="titem">Multi-sites <span class="tsep">✦</span></span>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="w">
+      <div class="lbl rv" style="margin-bottom:16px">Le constat</div>
+      <h2 class="h2 rv d1" style="max-width:500px">POURQUOI VOTRE<br>BUSINESS <span class="ya">PERD<br>DES CLIENTS.</span></h2>
+      <div class="prgrid">
+        <div class="prcard rv"><span class="prnum">01</span><h3>Pas de présence digitale</h3><p>Vos clients vous cherchent en ligne et tombent chez le concurrent. Chaque jour sans site = revenus perdus.</p></div>
+        <div class="prcard rv d1"><span class="prnum">02</span><h3>Appels manqués = argent perdu</h3><p>Vous êtes en prestation, le téléphone sonne. Ce client ne rappellera pas — il ira ailleurs.</p></div>
+        <div class="prcard rv d2"><span class="prnum">03</span><h3>Clients qui disparaissent</h3><p>Un client satisfait sans relance revient 3× moins souvent. La fidélisation manuelle ne tient pas.</p></div>
+        <div class="prcard rv d3"><span class="prnum">04</span><h3>10h/semaine d'admin perdue</h3><p>Facturation, planning, comptabilité, réseaux — des heures entières que vous n'avez pas à perdre.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="w">
+      <div class="lbl rv" style="margin-bottom:16px">Ce que l'on fait</div>
+      <h2 class="h2 rv d1" style="max-width:480px">LA SOLUTION <span class="ya">COMPLÈTE</span><br>POUR VOTRE ACTIVITÉ.</h2>
+      <div class="flayout">
+        <div id="featlist"></div>
+        <div class="fvisual">
+          <div class="fvcard">
+            <div class="fvhd">
+              <div class="fvdots"><span class="r"></span><span class="a"></span><span class="g"></span></div>
+              <span class="fvtitle">Dashboard Stepis IA</span>
+            </div>
+            <div class="fvbody" id="fvcontent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="w">
+      <div class="ctaban rv" id="ctaanchor">
+        <div>
+          <h2 style="font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,40px);font-weight:800;color:var(--bg);letter-spacing:-.025em;text-transform:uppercase;line-height:1.02">PRÊT À AUTOMATISER<br>VOTRE BUSINESS ?</h2>
+          <p style="font-size:13px;color:rgba(10,10,12,.55);margin-top:7px">Démo gratuite en 24h. Pas d'engagement, pas de CB.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+          <button class="btn btdark" onclick="goPage('pricing')">Voir les offres →</button>
+          <a href="mailto:ladouceurmathis.contact@gmail.com" class="ctamail">ladouceurmathis.contact@gmail.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="w">
+      <div class="ftgrid">
+        <div class="ftbrand"><div class="fn">⚡ <span>Stepis</span></div><p>Plateforme SaaS IA pour commerces et TPE. Site internet IA, fidélisation, réservation, répondeur vocal et comptabilité automatisée. Dès 149€/mois.</p></div>
+        <div class="ftcol"><h6>Navigation</h6><ul><li><button onclick="goPage('home')">Accueil</button></li><li><button onclick="goPage('pricing')">Offres IA</button></li><li><button onclick="goPage('about')">À propos</button></li><li><button onclick="goPage('sim')">Simulateur ROI</button></li></ul></div>
+        <div class="ftcol"><h6>Contact</h6><ul><li><a href="mailto:ladouceurmathis.contact@gmail.com">Email</a></li><li><a href="https://stepis.fr">stepis.fr</a></li></ul></div>
+      </div>
+      <div class="ftbot"><p>© 2025 Stepis — Mathis Ladouceur</p><p>Auvergne-Rhône-Alpes, France</p></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════ PAGE PRICING ═══════════ -->
+<div id="pg-pricing" class="pg">
+  <div class="phead">
+    <div class="w">
+      <div class="lbl rv" style="justify-content:center;margin-bottom:13px">Solutions SaaS IA — Tarifs 2025</div>
+      <h1 class="h1 rv d1" style="text-align:center">CHOISISSEZ <span class="ya">VOTRE<br>PUISSANCE.</span></h1>
+      <p class="bt rv d2" style="text-align:center;max-width:460px;margin:14px auto 0">Infrastructure IA complète. Cliquez sur une offre pour le détail — fonctionnement, compatibilité, résultats.</p>
+      <div class="rv d3" style="text-align:center">
+        <div class="ptoggle">
+          <span class="ptl on" id="ptlm">Mensuel</span>
+          <label class="togw"><input type="checkbox" id="ptog"><span class="togsl"></span></label>
+          <span class="ptl" id="ptla">Annuel <span class="savebadge">−20%</span></span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:9px">👆 Cliquez sur une carte pour le détail complet</div>
+      </div>
+    </div>
+  </div>
+  <div class="w" style="padding-bottom:36px">
+    <div class="lbl" style="margin-bottom:14px">Offres principales</div>
+    <div class="pgrid" id="pgrid"></div>
+    <div style="margin-top:32px"><div class="lbl" style="margin-bottom:14px">Module complémentaire</div></div>
+    <div class="pgrid" id="pgrid-addon" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));max-width:600px;"></div>
+    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:18px;line-height:1.7"><strong style="color:var(--m2)">Tous les abonnements</strong> incluent hébergement, MAJ et RGPD. Multi-sites : +99€/mois/établissement.</p>
+    <div style="text-align:center;margin-top:18px"><button class="btn btg" onclick="goPage('sim')" style="font-size:11px">📊 Simuler mon ROI →</button></div>
+  </div>
+  <footer><div class="w"><div class="ftgrid"><div class="ftbrand"><div class="fn">⚡ <span>Stepis</span></div><p>Dès 149€/mois.</p></div><div class="ftcol"><h6>Pages</h6><ul><li><button onclick="goPage('home')">Accueil</button></li><li><button onclick="goPage('about')">À propos</button></li><li><button onclick="goPage('sim')">Simulateur</button></li></ul></div><div class="ftcol"><h6>Contact</h6><ul><li><a href="mailto:ladouceurmathis.contact@gmail.com">Email</a></li></ul></div></div><div class="ftbot"><p>© 2025 Stepis</p></div></div></footer>
+</div>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drh">
+    <div><div class="drtier" id="drtier"></div><div class="drname" id="drname"></div><div class="drprice" id="drprice"></div></div>
+    <button class="drclose" id="drclose">✕</button>
+  </div>
+  <div class="drbody" id="drbody"></div>
+  <div class="drft">
+    <div style="flex:1"><div class="dfpa" id="dfpa"></div><div class="dfps" id="dfps"></div></div>
+    <button class="dfcta" id="dfcta">Souscrire →</button>
+  </div>
+</aside>
+
+<!-- ═══════════ PAGE ABOUT ═══════════ -->
+<div id="pg-about" class="pg">
+  <section class="sec" style="padding-top:clamp(72px,11vh,110px)">
+    <div class="w">
+      <div class="lbl rv" style="margin-bottom:14px">À propos de Stepis</div>
+      <h1 class="h1 rv d1" style="max-width:680px">L'IA QUI TRAVAILLE <span class="ya">POUR VOUS.</span></h1>
+      <div class="agrid">
+        <div class="atext">
+          <p class="rv d2">Stepis est une <b>plateforme SaaS IA</b> conçue pour les commerces, artisans et TPE qui veulent digitaliser leur activité sans se noyer dans la technique ni exploser leur budget.</p>
+          <p class="rv d3">Là où une agence vous facturerait <b>5 000 à 20 000€</b> pour mettre en place site web, CRM, fidélisation, chatbot et comptabilité — Stepis l'automatise <b>dès 149€/mois, en 5 jours.</b></p>
+          <p class="rv d4">Notre approche : un seul tableau de bord, une seule facture, un seul interlocuteur. L'IA fait le travail de fond. <b>Vous récupérez votre temps.</b></p>
+          <div class="avals rv">
+            <div class="aval"><div class="ico">⚡</div><div><h5>Rapidité</h5><p>Opérationnel en 5 jours. Pas 3 mois de va-et-vient.</p></div></div>
+            <div class="aval"><div class="ico">🎯</div><div><h5>Résultats mesurables</h5><p>Chaque euro investi tracé, chaque amélioration visible.</p></div></div>
+            <div class="aval"><div class="ico">🔗</div><div><h5>Intégration universelle</h5><p>Compatible site existant ou créé from scratch.</p></div></div>
+          </div>
+        </div>
+        <div class="acard rv d2">
+          <div class="bigny">IA.</div>
+          <h3>Pour votre commerce,<br>pas pour les GAFA.</h3>
+          <p>Les grandes entreprises ont des équipes entières pour automatiser leur marketing, relation client et comptabilité. Stepis donne les mêmes armes aux indépendants — sans la complexité, sans l'équipe, sans le budget d'un grand groupe.</p>
+          <div class="atags">
+            <span class="atag">Detailing auto</span><span class="atag">Beauté & bien-être</span><span class="atag">Restauration</span><span class="atag">Commerce local</span><span class="atag">Artisans</span><span class="atag">Multi-sites</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sec sec-alt">
+    <div class="w">
+      <div class="lbl rv" style="margin-bottom:14px">Nos chiffres</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:28px">
+        <div style="background:var(--bg2);padding:24px 16px;text-align:center" class="rv"><div style="font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--y);line-height:1">5j</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Mise en route</div></div>
+        <div style="background:var(--bg2);padding:24px 16px;text-align:center" class="rv d1"><div style="font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--y);line-height:1">24/7</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Répondeur IA actif</div></div>
+        <div style="background:var(--bg2);padding:24px 16px;text-align:center" class="rv d2"><div style="font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--y);line-height:1">×10</div><div style="font-size:11px;color:var(--muted);margin-top:5px">ROI moyen constaté</div></div>
+        <div style="background:var(--bg2);padding:24px 16px;text-align:center" class="rv d3"><div style="font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--y);line-height:1">0€</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Frais cachés</div></div>
+      </div>
+    </div>
+  </section>
+  <section class="sec"><div class="w"><div class="ctaban rv"><div><h2 style="font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,40px);font-weight:800;color:var(--bg);letter-spacing:-.025em;text-transform:uppercase;line-height:1.02">VOIR LES OFFRES EN DÉTAIL.</h2><p style="font-size:13px;color:rgba(10,10,12,.55);margin-top:7px">Chaque offre expliquée — modules, résultats, compatibilité.</p></div><button class="btn btdark" onclick="goPage('pricing')">Découvrir les offres →</button></div></div></section>
+  <footer><div class="w"><div class="ftgrid"><div class="ftbrand"><div class="fn">⚡ <span>Stepis</span></div><p>Dès 149€/mois.</p></div><div class="ftcol"><h6>Pages</h6><ul><li><button onclick="goPage('home')">Accueil</button></li><li><button onclick="goPage('pricing')">Offres</button></li><li><button onclick="goPage('sim')">Simulateur</button></li></ul></div><div class="ftcol"><h6>Contact</h6><ul><li><a href="mailto:ladouceurmathis.contact@gmail.com">Email</a></li></ul></div></div><div class="ftbot"><p>© 2025 Stepis</p></div></div></footer>
+</div>
+
+<!-- ═══════════ PAGE SIMULATOR ═══════════ -->
+<div id="pg-sim" class="pg">
+  <div class="shead">
+    <div class="w">
+      <div class="lbl rv" style="justify-content:center;margin-bottom:13px">Simulateur de revenus</div>
+      <h1 class="h1 rv d1" style="text-align:center">COMBIEN PEUT-ON<br><span class="ya">RÉCUPÉRER ?</span></h1>
+      <p class="bt rv d2" style="text-align:center;max-width:460px;margin:13px auto 0">Entrez vos chiffres. Voyez exactement combien la fidélisation IA génère — et en combien de temps vous êtes rentabilisé.</p>
+    </div>
+  </div>
+  <div class="w" style="padding-bottom:72px">
+    <div class="slayout">
+      <div>
+        <div class="panel">
+          <div class="pnh"><span class="pnn" style="background:var(--y);color:var(--bg)">1</span>Votre base client</div>
+          <div class="pns">Vos contacts CRM ou carnet de RDV.</div>
+          <div class="field">
+            <label>Nombre total de contacts / clients<span class="fdesc">Tous ayant déjà fait appel à vous.</span></label>
+            <div class="ibox"><input type="number" id="leads" value="500" min="0"><span class="unit">contacts</span></div>
+          </div>
+          <div class="divsec"></div>
+          <div class="pnh" style="margin-bottom:4px"><span class="pnn" style="background:var(--bl);color:#fff">⇄</span>Répartition de la base</div>
+          <div class="pns">Estimez le comportement de vos clients. Total = 100%.</div>
+          <div class="sgblk">
+            <div class="sghd"><span class="sgnm"><span class="dot dot-g"></span>Clients réguliers</span><span class="sgv" id="vreg">40%</span></div>
+            <div class="sgd">Reviennent spontanément, sans relance.</div>
+            <input type="range" id="sreg" min="0" max="100" value="40" style="accent-color:var(--gn)" oninput="calcSim()">
+          </div>
+          <div class="sgblk">
+            <div class="sghd"><span class="sgnm"><span class="dot dot-a"></span>Clients occasionnels</span><span class="sgv" id="vocc">35%</span></div>
+            <div class="sgd">Pourraient venir plus souvent si relancés.</div>
+            <input type="range" id="socc" min="0" max="100" value="35" style="accent-color:#f59e0b" oninput="calcSim()">
+          </div>
+          <div class="sgblk">
+            <div class="sghd"><span class="sgnm"><span class="dot dot-r"></span>Clients dormants</span><span class="sgv" id="vlost">25%</span></div>
+            <div class="sgd">Ne reviennent plus — à réactiver.</div>
+            <input type="range" id="slost" min="0" max="100" value="25" style="accent-color:#ef4444" oninput="calcSim()">
+          </div>
+          <div class="tck" id="tckid"></div>
+          <div class="divsec"></div>
+          <div class="pnh" style="margin-bottom:4px"><span class="pnn" style="background:var(--gn);color:#fff">€</span>Paramètres économiques</div>
+          <div class="pns">Les 3 leviers qui impactent le plus votre résultat.</div>
+          <div class="sgblk">
+            <div class="sghd"><span class="sgnm"><span class="dot dot-y"></span>Panier moyen / prestation</span><span class="sgv" id="vpan">65€</span></div>
+            <div class="sgd">CA moyen d'un passage (lavage, detailing, réno…).</div>
+            <input type="range" id="panier" min="20" max="400" step="5" value="65" style="accent-color:var(--y)" oninput="calcSim()">
+          </div>
+          <div class="sgblk">
+            <div class="sghd"><span class="sgnm"><span class="dot dot-g"></span>Récurrence régulier — actuelle</span><span class="sgv" id="vfreg">6/an</span></div>
+            <div class="sgd">Passages/an d'un bon client aujourd'hui.</div>
+            <input type="range" id="freg" min="1" max="24" step="1" value="6" style="accent-color:var(--gn)" oninput="calcSim()">
+          </div>
+          <div class="sgblk">
+            <div class="sghd"><span class="sgnm"><span class="dot dot-b"></span>Récurrence régulier — visée</span><span class="sgv" id="vfregt">8/an</span></div>
+            <div class="sgd">Fréquence cible grâce à la fidélisation IA.</div>
+            <input type="range" id="fregt" min="1" max="24" step="1" value="8" style="accent-color:var(--bl)" oninput="calcSim()">
+          </div>
+          <details class="det">
+            <summary>⚙️ Hypothèses avancées</summary>
+            <div class="field" style="margin-top:12px">
+              <label>Visites/an d'un occasionnel (actuel)<span class="fdesc">Avant fidélisation.</span></label>
+              <div class="ibox"><input type="number" id="focc" value="2" min="0" step="0.5" oninput="calcSim()"><span class="unit">/ an</span></div>
+            </div>
+            <div class="field">
+              <label>Gain de fréquence — occasionnels<span class="fdesc">Visites supplémentaires via relance IA.</span></label>
+              <div class="ibox"><input type="number" id="uocc" value="2" min="0" step="0.5" oninput="calcSim()"><span class="unit">+ /an</span></div>
+            </div>
+            <div class="field">
+              <label>Taux de réactivation dormants<span class="fdesc">% qui reviennent via les campagnes.</span></label>
+              <div class="ibox"><input type="number" id="react" value="20" min="0" max="100" oninput="calcSim()"><span class="unit">%</span></div>
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <label>Visites/an d'un dormant réactivé</label>
+              <div class="ibox"><input type="number" id="freact" value="2" min="0" step="0.5" oninput="calcSim()"><span class="unit">/ an</span></div>
+            </div>
+          </details>
+        </div>
+
+        <div class="panel" style="margin-top:14px">
+          <div class="pnh" style="margin-bottom:4px"><span class="pnn" style="background:var(--y);color:var(--bg)">✓</span>Offre choisie</div>
+          <div class="pns">Chaque offre a un impact différent sur vos résultats. Le coût s'intègre au ROI.</div>
+          <div class="osgrid">
+            <div class="osl" data-price="149" data-key="starter" onclick="pickOffer(this)">
+              <span class="ock">✓</span><div class="on2">Starter</div><div class="op2">149€</div><div class="oper">/mois</div>
+            </div>
+            <div class="osl sel sel-b" data-price="299" data-key="business" onclick="pickOffer(this)">
+              <span class="ock">✓</span><div class="on2">Business</div><div class="op2">299€</div><div class="oper">/mois</div>
+            </div>
+            <div class="osl" data-price="599" data-key="pro" onclick="pickOffer(this)">
+              <span class="ock">✓</span><div class="on2">Pro</div><div class="op2">599€</div><div class="oper">/mois</div>
+            </div>
+          </div>
+          <div class="ohint" id="ohintid">Business : automatisation avancée — résultats optimaux pour PME et commerces.</div>
+          <div class="varblk">
+            <div class="vartitle">Impact de l'offre sur vos résultats</div>
+            <div class="varrow"><span class="varlbl">Automatisation marketing</span><div class="varbarw"><div class="varbar" id="vbmkt" style="background:var(--gn)"></div></div><span class="varval" id="vvmkt" style="color:var(--gn)"></span></div>
+            <div class="varrow"><span class="varlbl">Réactivation dormants</span><div class="varbarw"><div class="varbar" id="vbrea" style="background:var(--bl)"></div></div><span class="varval" id="vvrea" style="color:var(--bl)"></span></div>
+            <div class="varrow"><span class="varlbl">Gain fréquence clients</span><div class="varbarw"><div class="varbar" id="vbfre" style="background:var(--y)"></div></div><span class="varval" id="vvfre" style="color:var(--y)"></span></div>
+            <div class="varrow"><span class="varlbl">Multiplicateur ROI</span><div class="varbarw"><div class="varbar" id="vbroi" style="background:var(--pu)"></div></div><span class="varval" id="vvroi" style="color:var(--pu)"></span></div>
+          </div>
+          <details class="det" style="margin-top:10px">
+            <summary>💰 Tarif personnalisé (override)</summary>
+            <div class="field" style="margin-top:10px;margin-bottom:0">
+              <label>Coût mensuel custom<span class="fdesc">Laissez vide pour utiliser le tarif sélectionné.</span></label>
+              <div class="ibox"><input type="number" id="abocust" placeholder="ex: 249" min="0" oninput="calcSim()"><span class="unit">€/mois</span></div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="panel rpanel">
+        <div class="pnh"><span class="pnn" style="background:var(--y);color:var(--bg)">2</span>Votre potentiel</div>
+        <div class="pns">Recalculé en temps réel.</div>
+        <div class="bnum">
+          <div class="bnl">CA supplémentaire estimé / an</div>
+          <div class="bnv" id="gaintotal">+0 €</div>
+          <div class="bnm" id="gainmonth">soit +0 € / mois</div>
+        </div>
+        <div class="rssplit">
+          <div class="rsb"><div class="rsl">CA actuel / an</div><div class="rsv" id="canow">0 €</div></div>
+          <div class="rsb"><div class="rsl">CA potentiel / an</div><div class="rsv rsvy" id="cafut">0 €</div></div>
+        </div>
+        <div class="brrow"><span class="brl"><span class="dot dot-g"></span>Réguliers fidélisés</span><span class="bra" id="brreg">+0 €</span></div>
+        <div class="brrow"><span class="brl"><span class="dot dot-a"></span>Occasionnels plus fréquents</span><span class="bra" id="brocc">+0 €</span></div>
+        <div class="brrow"><span class="brl"><span class="dot dot-r"></span>Dormants réactivés</span><span class="bra" id="brlost">+0 €</span></div>
+        <div class="roiblk">
+          <div class="roit">Retour sur investissement</div>
+          <div class="roir"><span>Gain annuel généré</span><b id="roigain">+0 €</b></div>
+          <div class="roir"><span>Abonnement / an</span><b id="roicost">−0 €</b></div>
+          <div class="roir roinr"><span>Bénéfice net / an</span><b id="roinnet">+0 €</b></div>
+          <div class="roir" style="margin-top:5px"><span>Chaque 1€ investi rapporte</span><b id="roix" style="color:var(--y)">×0</b></div>
+        </div>
+        <div class="payblk">
+          <div class="pt">Délai de rentabilisation</div>
+          <div class="pr"><span style="color:var(--m2)">L'abonnement est rentabilisé en</span><span class="pv" id="payback">—</span></div>
+        </div>
+        <div class="sbtns">
+          <button class="btn bty" onclick="window.print()">🖨️ Imprimer</button>
+          <button class="btn btg" onclick="resetSim()">↺ Reset</button>
+          <button class="btn btg" onclick="goPage('pricing')">Offres →</button>
+        </div>
+        <p class="sdisc">Estimations sectorielles. Résultats réels variables selon marché et exécution.</p>
+      </div>
+    </div>
+  </div>
+  <footer><div class="w"><div class="ftgrid"><div class="ftbrand"><div class="fn">⚡ <span>Stepis</span></div><p>Dès 149€/mois.</p></div><div class="ftcol"><h6>Pages</h6><ul><li><button onclick="goPage('home')">Accueil</button></li><li><button onclick="goPage('pricing')">Offres</button></li><li><button onclick="goPage('about')">À propos</button></li></ul></div><div class="ftcol"><h6>Contact</h6><ul><li><a href="mailto:ladouceurmathis.contact@gmail.com">Email</a></li></ul></div></div><div class="ftbot"><p>© 2025 Stepis</p></div></div></footer>
+</div>
+
+<script>
+/* ═══ CURSOR ═══ */
+var cdot=document.getElementById('cur-dot'),cring=document.getElementById('cur-ring');
+var mx=0,my=0,rx=0,ry=0;
+if(window.matchMedia('(hover:hover)').matches){
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX;my=e.clientY;
+    cdot.style.left=mx+'px';cdot.style.top=my+'px';
+  });
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.addEventListener('mouseover',function(e){
+    if(e.target.closest('button,a,input,label,.pcard,.osl,.fitm')){cring.style.width='52px';cring.style.height='52px';}
+    else{cring.style.width='36px';cring.style.height='36px';}
+  });
+}
+
+/* ═══ MOBILE NAV ═══ */
+function toggleHam(){
+  var h=document.getElementById('hamb'),l=document.getElementById('navlinks');
+  h.classList.toggle('open');l.classList.toggle('open');
+}
+
+/* ═══ REVEAL SCROLL ═══ */
+var rvObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});
+},{threshold:.1});
+function observeReveal(root){
+  (root||document).querySelectorAll('.rv').forEach(function(el){rvObs.observe(el);});
+}
+observeReveal();
+
+/* ═══ PAGE NAVIGATION ═══ */
+function goPage(id){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  var pg=document.getElementById('pg-'+id);
+  pg.classList.add('on','pg-enter');
+  setTimeout(function(){pg.classList.remove('pg-enter');},600);
+  document.querySelectorAll('.nbtn').forEach(function(b){b.classList.remove('on');});
+  var nb=document.getElementById('nb-'+id);
+  if(nb)nb.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('navlinks').classList.remove('open');
+  document.getElementById('hamb').classList.remove('open');
+  setTimeout(function(){observeReveal(pg);},60);
+}
+
+/* ═══ FEATURE TABS ═══ */
+var FEATS=[
+  {icon:'🌐',title:'Site internet IA',body:"Votre site généré, hébergé et mis à jour par l'IA. Responsive, SEO optimisé, jamais outdaté.",metrics:[{l:'Visibilité Google',v:'+40%',w:'72'},{l:'Temps de mise en ligne',v:'2 jours',w:'90'}],list:['Génération de contenu auto','SEO IA continu','A/B testing intégré']},
+  {icon:'📅',title:'Réservation en ligne',body:"Vos clients réservent 24/7. Confirmations et rappels automatiques SMS et email.",metrics:[{l:'Réservations en plus',v:'+15%',w:'55'},{l:'No-shows évités',v:'−30%',w:'65'}],list:['Agenda partagé temps réel','SMS/Email automatiques','Zéro double réservation']},
+  {icon:'💎',title:'Fidélisation IA',body:"Carte de fidélité digitale, programme de points, campagnes de relance automatisées.",metrics:[{l:'Clients fidélisés',v:'×2',w:'80'},{l:'Fréquence de retour',v:'+35%',w:'60'}],list:['Segmentation comportementale','Campagnes email/SMS auto','Offres anniversaire/inactivité']},
+  {icon:'📞',title:'Répondeur IA vocal',body:"Votre établissement décroche 24/7. Prend les RDV, répond aux questions, trace tout.",metrics:[{l:'Appels traités',v:'100%',w:'100'},{l:'RDV capturés en plus',v:'+20%',w:'58'}],list:['Voix naturelle française','Prise de RDV temps réel','Transcription dans votre CRM']},
+  {icon:'🧾',title:'Comptabilité auto',body:"Factures, devis, TVA et trésorerie générés automatiquement.",metrics:[{l:'Admin économisée',v:'−10h',w:'75'},{l:'Erreurs de saisie',v:'−95%',w:'90'}],list:['Facturation automatique','Export expert-comptable','Tableau de bord trésorerie']}
+];
+var activeFeat=0;
+function buildFeats(){
+  var fl=document.getElementById('featlist');
+  fl.innerHTML=FEATS.map(function(f,i){
+    return '<div class="fitm'+(i===0?' open':'')+'" onclick="setFeat('+i+')">'
+      +'<div class="ftop"><h4>'+f.icon+' '+f.title+'</h4><span class="farr">+</span></div>'
+      +'<div class="fbody">'+f.body+'</div></div>';
+  }).join('');
+  renderFeatVisual(0);
+}
+function setFeat(i){
+  activeFeat=i;
+  document.querySelectorAll('.fitm').forEach(function(el,j){el.classList.toggle('open',j===i);});
+  renderFeatVisual(i);
+}
+function renderFeatVisual(i){
+  var f=FEATS[i];
+  document.getElementById('fvcontent').innerHTML=
+    f.metrics.map(function(m){return '<div class="fvmet"><div class="ml">'+m.l+'</div><div class="mv">'+m.v+'</div><div class="fvbar"><div class="fvfill" style="width:'+m.w+'%;transition:width 0.8s"></div></div></div>';}).join('')
+    +'<ul class="fvlist">'+f.list.map(function(l){return '<li><span class="fvck">✓</span>'+l+'</li>';}).join('')+'</ul>';
+}
+buildFeats();
+
+/* ═══════════════════════════
+   PRICING DATA
+═══════════════════════════ */
+var COMPAT=[
+  {tech:'WordPress',b:'ok',n:'Plugin + widget JS'},
+  {tech:'Shopify',b:'ok',n:'App connectée + script'},
+  {tech:'Webflow',b:'ok',n:'Code embed natif'},
+  {tech:'HTML custom',b:'ok',n:'Script injection directe'},
+  {tech:'Wix / Squarespace',b:'mid',n:'Embed partiel, fonctions limitées'},
+  {tech:'Pas de site',b:'ok',n:'Site IA créé et inclus'}
+];
+var PODATA=[
+  {key:'s',cls:'s',icon:'⚡',name:'Starter',desc:'Artisan, micro-entreprise, commerce local.',monthly:149,annual:119,setup:299,featured:false,
+   mini:['Site internet IA','Réservation en ligne 24/7','Programme de fidélité digital','Chatbot IA FAQ','Planning & compta simplifiée'],
+   cap:[{v:'1',l:'Établissement'},{v:'300',l:'Clients/mois'},{v:'5',l:'Users'}],col:'var(--gn)',hex:'#22c55e',
+   flow:[{t:'Audit express (J1)',d:"Formulaire intelligent, configuration auto."},{t:'Site en ligne (J2–4)',d:"Généré selon vos couleurs. Vous validez, on publie."},{t:'Automatisations (J5)',d:"Réservation, fidélité et chatbot activés."},{t:'Onboarding 2h',d:"Formation complète, dashboard unique."}],
+   caps:[{i:'🌐',t:'Site IA clé en main',d:"Responsive, SEO, contenu IA, hébergement."},{i:'📅',t:'Réservation 24/7',d:"Agenda, confirmations auto SMS/email."},{i:'💎',t:'Fidélité auto',d:"Carte digitale, points, offres anniversaire."},{i:'🤖',t:'Chatbot IA',d:"FAQ, orientation, escalade humaine."},{i:'📊',t:'Compta simplifiée',d:"Revenus/dépenses, export comptable."},{i:'🗓️',t:'Planning',d:"Créneaux, disponibilités, rappels."}],
+   results:[{v:'+15%',l:'de réservations via RDV 24/7'},{v:'−6h',l:"d'admin par semaine"},{v:'×2',l:'de clients fidélisés'},{v:'<5j',l:'pour être opérationnel'}],rn:'Estimations sur commerces comparables, 1ʳᵉ année.',
+   inc:[{n:'Site IA',d:"Site, contenu IA, hébergement, MAJ."},{n:'Réservation',d:"Agenda partagé, confirmations auto."},{n:'Fidélisation',d:"Points, carte digitale, offres auto."},{n:'Chatbot IA',d:"FAQ, orientation, escalade."},{n:'Planning',d:"Créneaux, rappels."},{n:'Comptabilité',d:"Suivi mensuel, export comptable."}],
+   support:['Onboarding 2h','Support email','Base de connaissance','MAJ incluses']},
+  {key:'b',cls:'b',icon:'🚀',name:'Business',desc:'PME, restaurant, salon, commerce à flux régulier.',monthly:299,annual:239,setup:499,featured:true,
+   mini:['Tout Starter en version avancée','Site IA multi-pages + SEO auto','Campagnes email/SMS automatisées','Chatbot multicanal WhatsApp','Facturation TVA & analytics'],
+   cap:[{v:'3',l:'Établissements'},{v:'2000',l:'Clients/mois'},{v:'15',l:'Users'}],col:'var(--y)',hex:'#e8ff47',
+   flow:[{t:'Cadrage (J1–2)',d:"Parcours clients, campagnes et KPIs."},{t:'Site + SEO (J3–7)',d:"Multi-pages, blog auto, SEO IA."},{t:'Canaux (J8–10)',d:"Chatbot site+WhatsApp+réseaux."},{t:'Compta & intégrations (J11–12)',d:"Caisse, GMB, facturation, TVA."},{t:'Formation + suivi 30j',d:"Équipe formée, accompagnement post-lancement."}],
+   caps:[{i:'🌐',t:'Site IA + SEO',d:"Blog auto, SEO IA, landing pages, A/B."},{i:'💬',t:'Chatbot multicanal',d:"Site+WhatsApp+réseaux."},{i:'📣',t:'Marketing auto',d:"Campagnes email/SMS, segmentation, parrainage."},{i:'🧾',t:'Facturation & TVA',d:"Devis, factures auto, TVA, trésorerie."},{i:'📈',t:'Analytics',d:"KPIs, rapport hebdo IA, alertes."},{i:'🔗',t:'Intégrations',d:"Google My Business, Tripadvisor, caisse."}],
+   results:[{v:'+30%',l:'de CA sur clients réactivés'},{v:'+40%',l:'visibilité Google via SEO IA'},{v:'−10h',l:"d'admin par semaine"},{v:'70%',l:'demandes sans intervention'}],rn:'Estimations PME comparables, 6–12 mois.',
+   inc:[{n:'Site multi-pages',d:"Blog auto, SEO IA, landing pages."},{n:'Fidélisation avancée',d:"Segmentation, campagnes auto, parrainage."},{n:'Chatbot multicanal',d:"Site+WhatsApp+réseaux."},{n:'Planning & RH',d:"Équipes, congés, alertes."},{n:'Compta & facturation',d:"Devis, factures, TVA, trésorerie."},{n:'Analytics',d:"KPIs, rapport hebdo IA."},{n:'Intégrations',d:"GMB, Tripadvisor, caisse."}],
+   support:['Onboarding 4h','Chat prioritaire','Formation équipe','Suivi 30j','MAJ incluses']},
+  {key:'p',cls:'p',icon:'👑',name:'Pro',desc:'Multi-sites, franchises, fort volume.',monthly:599,annual:479,setup:799,featured:false,
+   mini:['Tout Business sans limite','IA décisionnelle & prévisions','Fiscalité & liasse fiscale','Dashboard multi-sites','API + CSM dédié + SLA 99,9%'],
+   cap:[{v:'∞',l:'Sites'},{v:'∞',l:'Clients'},{v:'∞',l:'Users'}],col:'var(--pu)',hex:'#a855f7',
+   flow:[{t:'Audit stratégique (S1)',d:"Analyse établissements, outils, objectifs."},{t:'Architecture multi-sites (S1–2)',d:"Dashboard consolidé, règles par site."},{t:'Intégrations sur mesure (S2–3)',d:"Connexion ERP/CRM via API."},{t:'IA décisionnelle (S3)',d:"Prévisions, scoring, fiscalité auto."},{t:'Déploiement + suivi CSM',d:"Lancement piloté, revues mensuelles."}],
+   caps:[{i:'🧠',t:'IA décisionnelle',d:"Prévisions revenus, scoring, recommandations."},{i:'⚖️',t:'Fiscalité auto',d:"TVA, liasse, déclarations, DGFiP."},{i:'🏢',t:'Multi-sites',d:"Dashboard consolidé, reporting groupe."},{i:'🔌',t:'API & sur-mesure',d:"Webhooks, ERP/CRM, dev inclus."},{i:'🛡️',t:'SLA 99,9%',d:"Uptime contractuel, monitoring 24/7."},{i:'🎯',t:'CSM dédié',d:"Interlocuteur unique, revue mensuelle."}],
+   results:[{v:'+25%',l:'de marge nette via IA'},{v:'−15h',l:'par mois par site'},{v:'1 vue',l:'pour tous vos sites'},{v:'99,9%',l:'disponibilité contractuelle'}],rn:"Estimations groupes multi-sites. Fiscalité = outil d'aide, pas substitut expert-comptable.",
+   inc:[{n:'IA décisionnelle',d:"Prévisions, scoring, recommandations."},{n:'Fiscalité & liasse',d:"TVA, déclarations auto."},{n:'Multi-sites centralisé',d:"Dashboard consolidé."},{n:'Marketing complet',d:"Tunnels IA, A/B illimité."},{n:'API ouverte',d:"Webhooks, ERP/CRM."},{n:'SLA 99,9%',d:"Monitoring 24/7, restauration 4h."},{n:'CSM dédié',d:"Revue mensuelle, roadmap perso."}],
+   support:['Onboarding full-service','Téléphone 6j/7','CSM dédié','Audit trimestriel','SLA 99,9%']}
+];
+var ADDON2={key:'voice',cls:'v',icon:'📞',name:'Répondeur IA',desc:'Module add-on. Votre établissement décroche 24/7.',monthly:99,annual:79,setup:199,isAddon:true,featured:false,
+ mini:['Répond aux appels 24/7','Tarifs horaires disponibilités','RDV dans le planning','Commandes simples','Voix naturelle française'],
+ cap:[{v:'∞',l:'Appels'},{v:'1',l:'Numéro'},{v:'24/7',l:'Dispo'}],col:'var(--or)',hex:'#f97316',
+ flow:[{t:'Config voix (J1–2)',d:"Entraînement sur vos tarifs et services."},{t:'Connexion téléphonique (J3)',d:"Numéro dédié ou redirection via Twilio."},{t:'Intégration planning (J3–4)',d:"Accès agenda temps réel."},{t:'Tests & go live (J4–5)',d:"Scénarios testés, ajustements, lancement."}],
+ caps:[{i:'📞',t:'Décroché auto',d:"Instantané, même la nuit ou en prestation."},{i:'🗓️',t:'Prise de RDV vocale',d:"Créneaux réels, confirmation immédiate."},{i:'💬',t:'Traitement demandes',d:"Prix, disponibilités, FAQ."},{i:'🔄',t:'Transfert intelligent',d:"Message structuré si complexe."},{i:'📊',t:'Historique appels',d:"Transcriptions dans votre dashboard."},{i:'🌐',t:'Multilingue',d:"Français, anglais, espagnol."}],
+ results:[{v:'0',l:'appel manqué'},{v:'+20%',l:'de réservations'},{v:'<3s',l:'pour décrocher'},{v:'100%',l:'demandes tracées'}],rn:'Très impactant : detailing, bien-être, restauration.',
+ inc:[{n:'Numéro dédié',d:"07/06 ou redirection ligne."},{n:'Voix naturelle',d:"Française, personnalisable."},{n:'Prise RDV temps réel',d:"Accès planning direct."},{n:'Traitement commandes',d:"Prix, FAQs."},{n:'Transfert & messagerie',d:"Message structuré si complexe."},{n:'Dashboard appels',d:"Transcription, résumé, résultat."}],
+ support:['Config voix incluse','Support 7j/7','Formation 1h','Transcriptions incluses']};
+
+var pAnn=false;
+function fmtN(n){return Math.round(n).toLocaleString('fr-FR');}
+function prOf(o){return pAnn?o.annual:o.monthly;}
+
+function renderCard(o,container){
+  var d=document.createElement('div');
+  d.className='pcard'+(o.featured?' feat':'');
+  d.innerHTML=(o.featured?'<div class="pribb">Populaire</div>':'')
+    +(o.isAddon?'<div class="addtag">Add-on</div>':'')
+    +'<div class="pchead">'
+    +'<div class="pill p'+o.cls+'" style="margin-bottom:10px">'+o.icon+' '+o.name+'</div>'
+    +'<div class="pcname">'+o.name+'</div>'
+    +'<div class="pcdesc">'+o.desc+'</div>'
+    +'<span class="pcprice" data-key="'+o.key+'">'+fmtN(prOf(o))+'</span><span class="pcper"> €/mois HT</span>'
+    +'<div class="pcsetup">+ <b>setup '+fmtN(o.setup)+'€</b> (unique)</div>'
+    +'</div>'
+    +'<div class="pcbody">'
+    +'<div class="pcmini">Aperçu</div>'
+    +'<ul class="pclist">'+o.mini.map(function(m){return '<li><span class="pck pck-'+o.cls+'">✓</span>'+m+'</li>';}).join('')+'</ul>'
+    +'<button class="pccta cta-'+o.cls+'">Voir le détail →</button>'
+    +'</div>';
+  d.addEventListener('click',function(){openDrawer(o);});
+  container.appendChild(d);
+}
+PODATA.forEach(function(o){renderCard(o,document.getElementById('pgrid'));});
+renderCard(ADDON2,document.getElementById('pgrid-addon'));
+
+document.getElementById('ptog').addEventListener('change',function(){
+  pAnn=this.checked;
+  document.getElementById('ptlm').classList.toggle('on',!pAnn);
+  document.getElementById('ptla').classList.toggle('on',pAnn);
+  document.querySelectorAll('.pcprice').forEach(function(el){
+    var all=PODATA.concat([ADDON2]);
+    var o=all.find(function(x){return x.key===el.dataset.key;});
+    if(!o)return;
+    el.classList.add('fade');
+    setTimeout(function(){el.textContent=fmtN(prOf(o));el.classList.remove('fade');},180);
+  });
+});
+
+function openDrawer(o){
+  var ns='style="background:'+o.hex+';color:#08080b"';
+  var fgc=(o.cls==='b'||o.cls==='v')?'#08080b':'#fff';
+  document.getElementById('drtier').className='drtier pill p'+o.cls;
+  document.getElementById('drtier').textContent=o.icon+' '+o.name;
+  document.getElementById('drname').textContent=o.name;
+  document.getElementById('drprice').innerHTML='<b>'+fmtN(prOf(o))+'€</b>/mois HT · setup '+fmtN(o.setup)+'€';
+  document.getElementById('dfpa').textContent=fmtN(prOf(o))+'€/mois HT';
+  document.getElementById('dfps').textContent='Setup unique '+fmtN(o.setup)+'€ · sans engagement';
+  var dfcta=document.getElementById('dfcta');
+  dfcta.style.background=o.hex;dfcta.style.color=fgc;
+  document.getElementById('drbody').innerHTML=
+    '<div class="dsec"><div class="dsh"><span class="dsn" '+ns+'>1</span>Ce qui devient possible</div>'
+    +'<p class="dsi">Concrètement, tout ce que cette offre vous permet de faire.</p>'
+    +'<div class="dcg">'+o.caps.map(function(c){return '<div class="dc"><div class="di">'+c.i+'</div><h5>'+c.t+'</h5><p>'+c.d+'</p></div>';}).join('')+'</div></div>'
+    +'<div class="dsec"><div class="dsh"><span class="dsn" '+ns+'>2</span>Comment ça fonctionne</div>'
+    +'<p class="dsi">De la signature à votre autonomie — sans jargon.</p>'
+    +'<div class="dflow" style="color:'+o.hex+'">'+o.flow.map(function(f){return '<div class="dfs"><h4>'+f.t+'</h4><p>'+f.d+'</p></div>';}).join('')+'</div></div>'
+    +'<div class="dsec"><div class="dsh"><span class="dsn" '+ns+'>3</span>Compatibilité avec l\'existant</div>'
+    +'<p class="dsi">Vous avez déjà un site ? On greffe l\'IA dessus.</p>'
+    +'<div class="dcompat">'+COMPAT.map(function(c){return '<div class="dcr"><span class="dt">'+c.tech+'</span><span class="dbd '+(c.b==='ok'?'dok':'dmi')+'">'+( c.b==='ok'?'Compatible':'Partiel')+'</span><span class="dn">'+c.n+'</span></div>';}).join('')+'</div></div>'
+    +'<div class="dsec"><div class="dsh"><span class="dsn" '+ns+'>4</span>Résultats estimés</div>'
+    +'<p class="dsi">Ordres de grandeur réalistes sur activités comparables.</p>'
+    +'<div class="dresg">'+o.results.map(function(r){return '<div class="drc"><div class="drv" style="color:'+o.hex+'">'+r.v+'</div><div class="drl">'+r.l+'</div></div>';}).join('')+'</div>'
+    +'<p class="drfoot">'+o.rn+'</p></div>'
+    +'<div class="dsec"><div class="dsh"><span class="dsn" '+ns+'>5</span>Capacité incluse</div>'
+    +'<div class="drsg">'+o.cap.map(function(c){return '<div class="drs"><span class="drsvl" style="color:'+o.hex+'">'+c.v+'</span><span class="drsll">'+c.l+'</span></div>';}).join('')+'</div></div>'
+    +'<div class="dsec"><div class="dsh"><span class="dsn" '+ns+'>6</span>Tout ce qui est inclus</div>'
+    +'<ul class="dinc">'+o.inc.map(function(f){return '<li><span class="dck" style="background:'+o.hex+'22;color:'+o.hex+'">✓</span><span><span class="dfn">'+f.n+'</span><span class="dfd">'+f.d+'</span></span></li>';}).join('')+'</ul></div>'
+    +'<div class="dsec" style="margin-bottom:4px"><div class="dsh"><span class="dsn" '+ns+'>7</span>Support & accompagnement</div>'
+    +'<div class="dtags">'+o.support.map(function(s){return '<span class="dtag">'+s+'</span>';}).join('')+'</div></div>';
+  document.getElementById('overlay').classList.add('on');
+  document.getElementById('drawer').classList.add('on');
+  document.body.style.overflow='hidden';
+  document.getElementById('drbody').scrollTop=0;
+}
+function closeDrawer(){
+  document.getElementById('overlay').classList.remove('on');
+  document.getElementById('drawer').classList.remove('on');
+  document.body.style.overflow='';
+}
+document.getElementById('drclose').addEventListener('click',closeDrawer);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDrawer();});
+
+/* ═══════════════════════════
+   SIMULATOR
+═══════════════════════════ */
+var OVAR={
+  starter:{um:.7,rm:.75,fb:-.5,mkt:55,rea:45,fre:40,hint:'Starter : automatisation de base — idéal pour débuter.'},
+  business:{um:1,rm:1,fb:0,mkt:80,rea:70,fre:65,hint:'Business : automatisation avancée — résultats optimaux pour PME.'},
+  pro:{um:1.35,rm:1.3,fb:.5,mkt:100,rea:95,fre:90,hint:'Pro : IA complète — résultats maximaux, multi-sites.'}
+};
+var curOfferKey='business',curOfferPrice=299;
+
+function pickOffer(el){
+  document.querySelectorAll('.osl').forEach(function(o){o.classList.remove('sel','sel-s','sel-b','sel-p');});
+  el.classList.add('sel');
+  var k=el.dataset.key;
+  if(k==='starter')el.classList.add('sel-s');
+  else if(k==='business')el.classList.add('sel-b');
+  else el.classList.add('sel-p');
+  curOfferKey=k;
+  curOfferPrice=parseInt(el.dataset.price);
+  document.getElementById('ohintid').textContent=OVAR[k]?OVAR[k].hint:'';
+  calcSim();
+}
+
+function ge(id){return document.getElementById(id);}
+function fmtE(n){return fmtN(Math.round(n))+' €';}
+
+function syncSliders(){
+  ge('vreg').textContent=ge('sreg').value+'%';
+  ge('vocc').textContent=ge('socc').value+'%';
+  ge('vlost').textContent=ge('slost').value+'%';
+  ge('vpan').textContent=parseInt(ge('panier').value).toLocaleString('fr-FR')+'€';
+  ge('vfreg').textContent=ge('freg').value+'/an';
+  ge('vfregt').textContent=ge('fregt').value+'/an';
+  var tot=parseInt(ge('sreg').value)+parseInt(ge('socc').value)+parseInt(ge('slost').value);
+  var tc=ge('tckid');
+  if(tot===100){tc.className='tck tok';tc.innerHTML='<span>✓ Répartition correcte</span><span>100%</span>';}
+  else{tc.className='tck twrn';tc.innerHTML='<span>⚠ Total = '+tot+'%</span><span>Ajustez à 100%</span>';}
+  return tot;
+}
+
+function updateVarBars(v,gainTotal,aboYear){
+  ge('vbmkt').style.width=v.mkt+'%';ge('vvmkt').textContent=v.mkt+'%';
+  ge('vbrea').style.width=v.rea+'%';ge('vvrea').textContent=v.rea+'%';
+  ge('vbfre').style.width=v.fre+'%';ge('vvfre').textContent=v.fre+'%';
+  var rp=aboYear>0?Math.min(Math.round((gainTotal/aboYear)*100/1.5),100):0;
+  ge('vbroi').style.width=rp+'%';
+  var xv=aboYear>0?(gainTotal/aboYear).toLocaleString('fr-FR',{maximumFractionDigits:1}):0;
+  ge('vvroi').textContent='×'+xv;
+}
+
+function calcSim(){
+  var tot=syncSliders();
+  var leads=parseFloat(ge('leads').value)||0;
+  var panier=parseFloat(ge('panier').value)||0;
+  var fReg=parseFloat(ge('freg').value)||0;
+  var fRegTBase=parseFloat(ge('fregt').value)||0;
+  var fOcc=parseFloat(ge('focc').value)||0;
+  var upBase=parseFloat(ge('uocc').value)||0;
+  var reactBase=(parseFloat(ge('react').value)||0)/100;
+  var fReact=parseFloat(ge('freact').value)||0;
+  var custVal=ge('abocust').value.trim();
+  var abo=custVal!==''?(parseFloat(custVal)||0):curOfferPrice;
+  var v=OVAR[curOfferKey]||OVAR.business;
+  var upOcc=upBase*v.um;
+  var reactRate=reactBase*v.rm;
+  var fRegT=Math.max(fReg,fRegTBase+v.fb);
+  var pR=(parseFloat(ge('sreg').value))/(tot||1);
+  var pO=(parseFloat(ge('socc').value))/(tot||1);
+  var pL=(parseFloat(ge('slost').value))/(tot||1);
+  var nR=leads*pR,nO=leads*pO,nL=leads*pL;
+  var caRN=nR*fReg*panier,caON=nO*fOcc*panier;
+  var caNow=caRN+caON;
+  var caRF=nR*fRegT*panier;
+  var caOF=nO*(fOcc+upOcc)*panier;
+  var nReact=nL*reactRate;
+  var caLF=nReact*fReact*panier;
+  var caFut=caRF+caOF+caLF;
+  var gR=caRF-caRN,gO=caOF-caON,gL=caLF;
+  var gTot=gR+gO+gL;
+  ge('gaintotal').textContent='+'+fmtE(gTot);
+  ge('gainmonth').textContent='soit +'+fmtE(gTot/12)+' / mois';
+  ge('canow').textContent=fmtE(caNow);
+  ge('cafut').textContent=fmtE(caFut);
+  ge('brreg').textContent='+'+fmtE(gR);
+  ge('brocc').textContent='+'+fmtE(gO);
+  ge('brlost').textContent='+'+fmtE(gL)+' ('+Math.round(nReact)+' clients)';
+  var aboY=abo*12,net=gTot-aboY;
+  ge('roigain').textContent='+'+fmtE(gTot);
+  ge('roicost').textContent='−'+fmtE(aboY);
+  ge('roinnet').innerHTML='<b>+'+fmtE(net)+'</b>';
+  var x=aboY>0?(gTot/aboY):0;
+  ge('roix').textContent='×'+x.toLocaleString('fr-FR',{maximumFractionDigits:1});
+  var moGain=gTot/12;
+  var pb=moGain>0?Math.ceil(abo/moGain):null;
+  ge('payback').textContent=pb?(pb===1?'1 mois':pb+' mois'):'—';
+  updateVarBars(v,gTot,aboY);
+}
+
+function resetSim(){
+  ge('leads').value=500;ge('panier').value=65;ge('freg').value=6;ge('fregt').value=8;
+  ge('sreg').value=40;ge('socc').value=35;ge('slost').value=25;
+  ge('focc').value=2;ge('uocc').value=2;ge('react').value=20;ge('freact').value=2;
+  ge('abocust').value='';
+  pickOffer(document.querySelector('.osl[data-key="business"]'));
+}
+
+calcSim();
+</script>
+</body>
+</html>
