@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getOrgContext } from "@/lib/auth/context";
 import { getTodayData } from "@/lib/dashboard/today";
 import { Badge } from "@/components/ui/Badge";
+import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { formatDateTime, formatEuro } from "@/lib/utils";
 
 /**
@@ -33,6 +34,17 @@ export default async function DashboardHome() {
         </p>
       </section>
 
+      {/* UX-FIX: bannière de bienvenue pour les orgs sans données encore */}
+      {data.totalContacts === 0 && data.missedCalls === 0 && data.newLeads === 0 && (
+        <WelcomeBanner
+          firstName={ctx.profile.full_name?.split(" ")[0] ?? ""}
+          orgName={ctx.org.name}
+          hasSite={ctx.enabledModules.has("site")}
+          hasCrm={ctx.enabledModules.has("crm")}
+          hasLoyalty={ctx.enabledModules.has("loyalty_card")}
+        />
+      )}
+
       {/* Stats clés */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatCard
@@ -51,7 +63,7 @@ export default async function DashboardHome() {
         <StatCard label="Cartes fidélité" value={data.totalCards} href="/loyalty" />
       </section>
 
-      {/* Manager digest (si présent) */}
+      {/* UX-FIX: « Digest » → « Résumé du jour » (terminologie humaine) */}
       {data.digest && (
         <section className="surface p-5">
           <div className="mb-2 flex items-center gap-2 text-[12px] uppercase tracking-wider text-[var(--muted)]">

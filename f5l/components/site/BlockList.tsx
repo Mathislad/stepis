@@ -33,8 +33,9 @@ export function BlockList({ blocks }: { blocks: SiteContentRow[] }) {
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">{BLOCK_TYPE_LABELS[b.block_type]}</span>
+                {/* UX-FIX: « Publié/Brouillon » → « Visible/Masqué » (langage commerçant) */}
                 <Badge tone={b.published ? "green" : "neutral"}>
-                  {b.published ? "Publié" : "Brouillon"}
+                  {b.published ? "Visible" : "Masqué"}
                 </Badge>
               </div>
               <p className="mt-0.5 truncate text-[13px] text-[var(--text-2)]">
@@ -72,7 +73,7 @@ export function BlockList({ blocks }: { blocks: SiteContentRow[] }) {
               <input type="hidden" name="blockId" value={b.id} />
               <input type="hidden" name="published" value={(!b.published).toString()} />
               <button type="submit" className="btn btn-ghost px-3 py-1.5 text-[13px]">
-                {b.published ? "Dépublier" : "Publier"}
+                {b.published ? "Masquer" : "Rendre visible"}
               </button>
             </form>
             <Link

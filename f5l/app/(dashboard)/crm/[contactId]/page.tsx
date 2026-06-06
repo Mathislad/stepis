@@ -14,7 +14,7 @@ import {
   SOURCE_TONES,
 } from "@/lib/crm/labels";
 
-export const metadata = { title: "CRM — Fiche contact" };
+export const metadata = { title: "Fiche client" };
 
 export default async function ContactDetailPage({
   params,
@@ -33,7 +33,7 @@ export default async function ContactDetailPage({
     <div className="flex flex-col gap-6">
       <div>
         <Link href="/crm" className="text-[13px] text-[var(--text-2)] hover:text-[var(--text)]">
-          ← Contacts
+          ← Mes clients
         </Link>
         <div className="mt-1 flex items-start justify-between gap-4">
           <div>
@@ -61,7 +61,7 @@ export default async function ContactDetailPage({
         </section>
 
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-medium text-[var(--text-2)]">Journal d&apos;activité</h2>
+          <h2 className="text-sm font-medium text-[var(--text-2)]">Échanges</h2>
           <ActivityComposer contactId={contact.id} />
           <div className="surface p-4">
             <ActivityTimeline activities={activities} />

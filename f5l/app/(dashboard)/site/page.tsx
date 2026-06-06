@@ -31,13 +31,14 @@ export default async function SitePage() {
           <h1 className="text-2xl font-semibold">Mon site</h1>
           <p className="text-sm text-[var(--text-2)]">{ctx.org.name}</p>
         </div>
-        <a href={publicUrl} target="_blank" rel="noreferrer" className="btn btn-ghost">
-          Voir mon site ↗
+        {/* UX-FIX: bouton « Voir mon site en vrai » plus visible (variant primary) */}
+        <a href={publicUrl} target="_blank" rel="noreferrer" className="btn btn-primary">
+          Voir mon site en vrai ↗
         </a>
       </header>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <Stat label="Blocs publiés" value={`${published}/${blocks.length}`} />
+        <Stat label="Sections visibles" value={`${published}/${blocks.length}`} />
         <Stat label="Offres actives" value={activeOffers} />
         <Link
           href="/site/offers"
@@ -49,7 +50,8 @@ export default async function SitePage() {
 
       <section className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-sm font-medium text-[var(--text-2)]">Blocs de contenu</h2>
+          {/* UX-FIX: « Blocs » → « Sections de votre site » (plus humain) */}
+          <h2 className="text-sm font-medium text-[var(--text-2)]">Sections de votre site</h2>
           <AddBlockMenu />
         </div>
         <BlockList blocks={blocks} />

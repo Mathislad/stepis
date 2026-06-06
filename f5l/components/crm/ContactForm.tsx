@@ -59,8 +59,9 @@ export function ContactForm({
           value={type}
           onChange={(e) => setType(e.target.value as ContactType)}
         >
-          <option value="b2c">Particulier (B2C)</option>
-          <option value="b2b">Professionnel (B2B)</option>
+          {/* UX-FIX: B2B/B2C remplacés par leur équivalent humain */}
+          <option value="b2c">Particulier</option>
+          <option value="b2b">Professionnel</option>
         </Select>
       </Field>
 
@@ -93,7 +94,8 @@ export function ContactForm({
               defaultValue={contact?.potential_value?.toString() ?? ""}
             />
           </Field>
-          <Field label="Pipeline">
+          {/* UX-FIX: « Pipeline » → « Étape » */}
+          <Field label="Étape">
             <Select name="pipeline_status" defaultValue={contact?.pipeline_status ?? ""}>
               <option value="">—</option>
               {Object.entries(PIPELINE_LABELS).map(([key, label]) => (
@@ -139,7 +141,7 @@ export function ContactForm({
           {pending
             ? "Enregistrement…"
             : mode === "create"
-              ? "Créer le contact"
+              ? "Créer le client"
               : "Enregistrer"}
         </button>
       </div>

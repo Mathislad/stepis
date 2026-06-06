@@ -6,7 +6,8 @@ import { OBJECTIVE_LABELS, STATUS_LABELS, STATUS_TONES } from "@/lib/acquisition
 import { Badge } from "@/components/ui/Badge";
 import { formatEuro } from "@/lib/utils";
 
-export const metadata = { title: "Acquisition" };
+// UX-FIX: « Acquisition » → « Publicité » (vocabulaire commerçant)
+export const metadata = { title: "Publicité" };
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (

@@ -3,12 +3,13 @@ import { requireModule } from "@/lib/auth/require-module";
 import { listLeads } from "@/lib/crm/leads";
 import { LeadCard } from "@/components/crm/LeadCard";
 
-export const metadata = { title: "CRM — Leads" };
+// UX-FIX: « Leads » → « Demandes de contact », « Conversion » → « Transformer en client »
+export const metadata = { title: "Demandes de contact" };
 
 const CONVERT_NOTICE: Record<string, string> = {
-  exists: "Ce lead a déjà été converti en contact.",
-  missing: "Lead introuvable.",
-  error: "La conversion a échoué, réessayez.",
+  exists: "Cette demande a déjà été transformée en client.",
+  missing: "Demande introuvable.",
+  error: "Impossible de transformer cette demande, réessayez.",
 };
 
 export default async function LeadsPage({
@@ -26,16 +27,16 @@ export default async function LeadsPage({
     <div className="flex flex-col gap-6">
       <div>
         <Link href="/crm" className="text-[13px] text-[var(--text-2)] hover:text-[var(--text)]">
-          ← Contacts
+          ← Mes clients
         </Link>
         <div className="mt-1 flex items-baseline gap-3">
-          <h1 className="text-2xl font-semibold">Leads entrants</h1>
+          <h1 className="text-2xl font-semibold">Demandes de contact</h1>
           {newCount > 0 && (
-            <span className="text-sm text-[var(--text-2)]">{newCount} nouveau(x)</span>
+            <span className="text-sm text-[var(--text-2)]">{newCount} nouvelle(s)</span>
           )}
         </div>
         <p className="text-sm text-[var(--text-2)]">
-          Demandes issues du site — qualifiez-les puis convertissez-les en contacts.
+          Demandes reçues via votre site — rappelez-les ou transformez-les en client.
         </p>
       </div>
 
@@ -52,9 +53,9 @@ export default async function LeadsPage({
       {leads.length === 0 ? (
         <div className="surface flex flex-col items-center gap-2 px-5 py-16 text-center">
           <p className="text-3xl">📥</p>
-          <p className="font-medium">Aucun lead</p>
+          <p className="font-medium">Aucune demande pour l&apos;instant</p>
           <p className="max-w-xs text-sm text-[var(--text-2)]">
-            Les demandes reçues depuis votre site apparaîtront ici.
+            Les demandes reçues via le formulaire de votre site apparaîtront ici.
           </p>
         </div>
       ) : (

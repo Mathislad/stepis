@@ -29,9 +29,9 @@ function Stat({
 export function StatsBar({ stats }: { stats: CrmStats }) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      <Stat label="Contacts" value={stats.total} />
-      <Stat label="Professionnels (B2B)" value={stats.b2b} />
-      <Stat label="Particuliers (B2C)" value={stats.b2c} />
+      <Stat label="Clients au total" value={stats.total} />
+      <Stat label="Professionnels" value={stats.b2b} />
+      <Stat label="Particuliers" value={stats.b2c} />
       <Stat label="Clients amenés par F5L" value={stats.f5lAcquired} accent />
     </div>
   );

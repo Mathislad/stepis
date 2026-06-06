@@ -7,7 +7,7 @@ import { ContactFilters } from "@/components/crm/ContactFilters";
 import { ContactList } from "@/components/crm/ContactList";
 import type { ContactSource, ContactType, PipelineStatus } from "@/types/database";
 
-export const metadata = { title: "CRM — Contacts" };
+export const metadata = { title: "Mes clients" };
 
 const PIPELINE: PipelineStatus[] = ["lead", "qualified", "proposal", "won", "lost"];
 const SOURCES: ContactSource[] = ["f5l_acquisition", "manual", "site_form", "loyalty", "other"];
@@ -47,15 +47,16 @@ export default async function CrmContactsPage({
     <div className="flex flex-col gap-6">
       <header className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">CRM</h1>
-          <p className="text-sm text-[var(--text-2)]">Contacts & relations</p>
+          {/* UX-FIX: « CRM » → « Mes clients », « Leads » → « Demandes de contact » */}
+          <h1 className="text-2xl font-semibold">Mes clients</h1>
+          <p className="text-sm text-[var(--text-2)]">Vos contacts et leur historique</p>
         </div>
         <div className="flex items-center gap-2">
           <Link href="/crm/leads" className="btn btn-ghost">
-            Leads
+            Demandes de contact
           </Link>
           <Link href="/crm/new" className="btn btn-primary">
-            Nouveau contact
+            + Nouveau client
           </Link>
         </div>
       </header>
