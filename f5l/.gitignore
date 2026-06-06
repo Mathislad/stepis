@@ -1,0 +1,26 @@
+# dépendances
+/node_modules
+/.pnp
+.pnp.*
+
+# build Next
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# environnement (ne jamais committer les secrets)
+.env
+.env.local
+.env*.local
+
+# Supabase CLI (stack locale)
+/supabase/.branches
+/supabase/.temp
+
+# divers
+.DS_Store
+*.pem
+npm-debug.log*
+.vercel

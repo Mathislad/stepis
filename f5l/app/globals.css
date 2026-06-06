@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   F5L — thème sombre « Apple / iOS »
+   Noir profond, surfaces translucides, accents iOS (bleu / violet / vert).
+   ========================================================================== */
+@theme inline {
+  --color-bg: #000000;
+  --color-bg-elevated: #0a0a0c;
+
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-strong: rgba(255, 255, 255, 0.07);
+
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+
+  --color-text: #f5f5f7;
+  --color-text-secondary: rgba(235, 235, 245, 0.6);
+  --color-text-muted: rgba(235, 235, 245, 0.35);
+
+  /* Accents système iOS */
+  --color-blue: #0a84ff;
+  --color-violet: #bf5af2;
+  --color-green: #30d158;
+  --color-amber: #ff9f0a;
+  --color-red: #ff453a;
+}
+
+:root {
+  --bg: #000000;
+  --bg-elev: #0a0a0c;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --text: #f5f5f7;
+  --text-2: rgba(235, 235, 245, 0.6);
+  --muted: rgba(235, 235, 245, 0.35);
+  --blue: #0a84ff;
+  --violet: #bf5af2;
+  --green: #30d158;
+  --amber: #ff9f0a;
+  --red: #ff453a;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+}
+
+/* Fond d'ambiance discret (halos bleu/violet) */
+.app-bg {
+  background:
+    radial-gradient(60% 50% at 15% 0%, rgba(10, 132, 255, 0.08), transparent 60%),
+    radial-gradient(50% 45% at 95% 5%, rgba(191, 90, 242, 0.07), transparent 60%),
+    var(--bg);
+}
+
+/* ── Cartes / surfaces ─────────────────────────────────────────────────── */
+.surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  backdrop-filter: blur(20px);
+}
+
+.surface-hover {
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.surface-hover:hover {
+  background: var(--surface-strong);
+  border-color: var(--border-strong);
+}
+
+/* ── Boutons ───────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.2s ease, background 0.2s ease;
+  border: 1px solid transparent;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #2b95ff;
+}
+
+.btn-ghost {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+.btn-ghost:hover {
+  background: var(--surface-strong);
+  border-color: var(--border-strong);
+}
+
+/* ── Champs ────────────────────────────────────────────────────────────── */
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input::placeholder {
+  color: var(--muted);
+}
+.input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25);
+}
+
+/* ── Badges ────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  background: var(--surface);
+}
+.badge-green { color: var(--green); border-color: rgba(48, 209, 88, 0.3); background: rgba(48, 209, 88, 0.1); }
+.badge-muted { color: var(--muted); }
+
+/* ── Focus visible (accessibilité) ─────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::selection { background: rgba(10, 132, 255, 0.3); }
