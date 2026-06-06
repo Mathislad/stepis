@@ -181,3 +181,48 @@ Exemple : ajouter le module **CRM**.
 
 Aucune logique d'isolation à réécrire : `org_id = current_org_id()` s'applique
 automatiquement à toute requête du nouveau module.
+
+---
+
+## 6. Modules livrés (à jour)
+
+| Module | Clé `module_key` | Migration | `lib/` | Routes |
+|---|---|---|---|---|
+| Site éditable + capture leads | `site` · `lead_capture` | 0003, 0008 | `lib/site` | `/site`, `/p/[slug]` |
+| CRM | `crm` | 0002 | `lib/crm` | `/crm`, `/crm/[id]`, `/crm/leads`, `/crm/new` |
+| Carte de fidélité | `loyalty_card` | (utilise 0001) | `lib/loyalty` | `/loyalty`, `/loyalty/[id]`, `/loyalty/new`, `/loyalty/rewards`, `/carte/[token]` |
+| Agent Fidélisation | `loyalty_agent` | 0004 | `lib/loyalty-agent` | `/loyalty-agent`, `/api/cron/loyalty-agent` |
+| Manager | `manager` | 0009, 0010 | `lib/manager` | `/manager` |
+| Réputation | `reputation` | 0005, 0006, 0007, 0011 | `lib/reputation` | `/reputation`, `/feedback/[id]` |
+| Téléphone | `phone` | 0012 | `lib/telephone` (+ stub `lib/vapi`) | `/telephone`, `/telephone/[id]`, `/telephone/settings` |
+| Acquisition | `acquisition` | 0013 | `lib/acquisition` (+ stubs `lib/ads/meta`, `lib/ads/google`) | `/acquisition`, `/acquisition/[id]`, `/acquisition/new` |
+| Administratif | `admin` | 0014 | `lib/admin` (+ stubs `lib/signature/yousign`, `lib/accounting/pennylane`) | `/admin`, `/admin/[id]`, `/admin/new` |
+
+### Tables ajoutées par module
+
+- **0012** : `calls`, `phone_settings`
+- **0013** : `ad_campaigns`, `ad_campaign_reports` *(décision : `ad_campaigns` pour éviter la collision avec `campaigns` du module Fidélisation)*
+- **0014** : `documents`, `payment_reminders`
+
+### RPC publiques
+
+- `current_org_id()` — fondation (0001).
+- `get_loyalty_card_by_token(token)` — fondation (0001).
+- `convert_lead_to_contact(lead_id, type)` — CRM (0002).
+- `create_public_lead(slug, …)` — étape 3, durci en 0008.
+- `create_private_feedback_for_request(request_id, rating, message)` — réputation (0006, durci en 0007).
+
+### Exception encadrée
+
+- `app/auth/callback/route.ts` appelle directement `supabase.auth.exchangeCodeForSession()` (chemin Supabase imposé). Tout autre accès données passe par `lib/`.
+
+### Stubs d'intégrations externes (gracieux)
+
+Tous les stubs retournent `{ configured: false, message: ... }` tant que la clé d'env correspondante est absente, sans jamais propager d'exception :
+
+- `lib/brevo/{client,notify}` — SMS + email (présent et actif si clé).
+- `lib/anthropic/client` — IA (Manager, génération de copy publicitaire).
+- `lib/vapi/client` — téléphonie IA.
+- `lib/ads/{meta,google}` — Meta Ads, Google Ads.
+- `lib/signature/yousign` — signature électronique.
+- `lib/accounting/pennylane` — comptabilité.

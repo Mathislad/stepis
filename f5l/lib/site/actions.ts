@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireModule } from "@/lib/auth/require-module";
 import { createClient } from "@/lib/supabase/server";
@@ -34,6 +35,14 @@ function str(fd: FormData, key: string): string {
 function optStr(fd: FormData, key: string): string | null {
   const v = str(fd, key);
   return v === "" ? null : v;
+}
+function truncate(value: string | null, max: number): string | null {
+  return value && value.length > max ? value.slice(0, max) : value;
+}
+function safeSourceUrl(value: string | null): string | null {
+  if (!value) return null;
+  if (value.length > 500) return value.slice(0, 500);
+  return value;
 }
 
 /** Révalide le dashboard + le site public de l'org (slug résolu serveur-side). */
@@ -214,12 +223,16 @@ export async function captureLeadAction(
   const slug = str(fd, "slug");
   const name = str(fd, "name");
   const phone = str(fd, "phone");
-  const email = str(fd, "email");
-  const message = str(fd, "message");
-  const sourceUrl = optStr(fd, "sourceUrl");
+  const email = truncate(str(fd, "email"), 180) ?? "";
+  const message = truncate(str(fd, "message"), 1200) ?? "";
+  const requestHeaders = await headers();
+  const sourceUrl = safeSourceUrl(optStr(fd, "sourceUrl") ?? requestHeaders.get("referer"));
 
   if (!slug) return { ok: false, error: "Site introuvable." };
   if (!name || !phone) return { ok: false, error: "Le nom et le téléphone sont requis." };
+  if (name.length > 120 || phone.length > 40) {
+    return { ok: false, error: "Nom ou téléphone trop long." };
+  }
 
   // 1. Création du lead via RPC SECURITY DEFINER (org_id résolu serveur-side).
   const supabase = await createClient();

@@ -1,10 +1,22 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPublicSite } from "@/lib/site/content";
-import { asOffer } from "@/lib/site/blocks";
+import { asOffer, asText } from "@/lib/site/blocks";
 import { PublicBlocks } from "@/components/public/PublicBlocks";
 import { PublicOffers } from "@/components/public/PublicOffers";
 import { LeadForm } from "./LeadForm";
+
+function cleanDescription(value: string): string {
+  return value.replace(/\s+/g, " ").trim().slice(0, 155);
+}
+
+function siteDescription(site: NonNullable<Awaited<ReturnType<typeof getPublicSite>>>): string {
+  const textBlock = site.blocks.find((block) => block.block_type === "text");
+  const text = textBlock ? asText(textBlock.content) : null;
+  return cleanDescription(
+    text?.body || text?.title || site.org.sector || `Page officielle de ${site.org.name}.`,
+  );
+}
 
 export async function generateMetadata({
   params,
@@ -13,7 +25,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const site = await getPublicSite(slug);
-  return { title: site ? site.org.name : "Site introuvable" };
+  if (!site) {
+    return {
+      title: "Site introuvable",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const title = site.org.name;
+  const description = siteDescription(site);
+  return {
+    title,
+    description,
+    alternates: { canonical: `/p/${site.org.slug}` },
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: `/p/${site.org.slug}`,
+      siteName: "F5L",
+    },
+  };
 }
 
 export default async function PublicSitePage({

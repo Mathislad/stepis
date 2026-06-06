@@ -8,9 +8,11 @@ import { requireEnv } from "@/lib/env";
  *  - /login          : page de connexion
  *  - /auth           : route handlers d'auth (callback, etc.)
  *  - /carte          : consultation publique d'une carte de fidélité (par token)
+ *  - /feedback       : feedback privé depuis une demande d'avis
  *  - /p              : site public éditable d'un commerce (par slug)
+ *  - /api/cron       : tâches planifiées protégées par secret applicatif
  */
-const PUBLIC_PREFIXES = ["/login", "/auth", "/carte", "/p"];
+const PUBLIC_PREFIXES = ["/login", "/auth", "/carte", "/feedback", "/p", "/api/cron"];
 
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PREFIXES.some(

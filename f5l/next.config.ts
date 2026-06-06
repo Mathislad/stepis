@@ -21,7 +21,7 @@ const csp = [
   `default-src 'self'`,
   isDev ? `script-src 'self' 'unsafe-inline' 'unsafe-eval'` : `script-src 'self' 'unsafe-inline'`,
   `style-src 'self' 'unsafe-inline'`,
-  `img-src 'self' data: blob:`,
+  `img-src 'self' https: data: blob:`,
   `font-src 'self' data:`,
   isDev ? `connect-src ${connectSrc} ws: wss: https:` : `connect-src ${connectSrc}`,
   `worker-src 'self'`,
@@ -41,6 +41,7 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
   { key: "X-DNS-Prefetch-Control", value: "off" },
 ];
 

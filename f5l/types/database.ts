@@ -29,8 +29,34 @@ export type LoyaltyReason = "earn" | "redeem" | "adjust";
 export type CampaignTrigger = "birthday" | "inactive" | "post_purchase" | "seasonal";
 export type Channel = "sms" | "email" | "whatsapp";
 export type UsageMetric = "sms" | "email" | "ai_tokens" | "call_minutes";
+export type ReviewRequestStatus = "queued" | "sent" | "opened" | "clicked" | "failed";
+export type ReviewSource = "google" | "private" | "manual";
+export type ReviewSentiment = "positive" | "neutral" | "negative" | "unknown";
+export type ManagerActionStatus =
+  | "pending"
+  | "approved"
+  | "executing"
+  | "rejected"
+  | "executed"
+  | "cancelled";
+export type ManagerActionRisk = "low" | "medium" | "high";
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
+export type ManagerAiSummary = {
+  generatedAt: string;
+  model: string;
+  briefing: string;
+  priorities: string[];
+  risks: string[];
+  opportunities: string[];
+  nextActions: string[];
+  confidence: string;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+  };
+}
 
 // ── Helper : génère Insert à partir du Row ──────────────────────────────────
 // Sont optionnelles : les colonnes à défaut DB (`Generated`) ET les colonnes
@@ -188,6 +214,8 @@ export type MessageRow = {
   id: string;
   org_id: string;
   contact_id: string | null;
+  campaign_id: string | null;
+  dedupe_key: string | null;
   channel: Channel;
   provider_id: string | null;
   status: string | null;
@@ -219,6 +247,161 @@ export type AuditLogRow = {
   action: string;
   payload: Json;
   created_at: string;
+}
+
+export type ReviewRequestRow = {
+  id: string;
+  org_id: string;
+  contact_id: string | null;
+  channel: Channel;
+  status: ReviewRequestStatus;
+  request_url: string | null;
+  dedupe_key: string | null;
+  sent_at: string | null;
+  created_at: string;
+}
+
+export type ReviewRow = {
+  id: string;
+  org_id: string;
+  contact_id: string | null;
+  source: ReviewSource;
+  rating: number | null;
+  author_name: string | null;
+  content: string | null;
+  sentiment: ReviewSentiment;
+  public_url: string | null;
+  response_draft: string | null;
+  response_draft_generated_at: string | null;
+  response_approved_at: string | null;
+  response_approved_by: string | null;
+  responded_at: string | null;
+  received_at: string;
+  created_at: string;
+}
+
+export type PrivateFeedbackRow = {
+  id: string;
+  org_id: string;
+  contact_id: string | null;
+  request_id: string | null;
+  rating: number | null;
+  message: string | null;
+  handled: boolean;
+  created_at: string;
+}
+
+export type ManagerActionRequestRow = {
+  id: string;
+  org_id: string;
+  agent: string;
+  action: string;
+  risk: ManagerActionRisk;
+  status: ManagerActionStatus;
+  payload: Json;
+  requested_by: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// ── Module Téléphone (0012) ────────────────────────────────────────────────
+export type CallStatus = "missed" | "answered" | "voicemail";
+
+export type CallRow = {
+  id: string;
+  org_id: string;
+  caller_phone: string | null;
+  caller_name: string | null;
+  summary: string | null;
+  recording_url: string | null;
+  status: CallStatus;
+  duration_seconds: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type PhoneSettingsRow = {
+  id: string;
+  org_id: string;
+  greeting_message: string;
+  transfer_number: string | null;
+  active_hours: Json;
+  auto_sms_on_miss: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// ── Module Acquisition (0013) ──────────────────────────────────────────────
+export type AdObjective = "visibility" | "leads" | "promo";
+export type AdPlatform = "meta" | "google" | "both";
+export type AdCampaignStatus = "draft" | "active" | "paused" | "completed";
+
+export type AdCampaignRow = {
+  id: string;
+  org_id: string;
+  title: string;
+  objective: AdObjective;
+  platform: AdPlatform;
+  budget: number;
+  duration_days: number;
+  status: AdCampaignStatus;
+  ad_copy: string | null;
+  ad_visual_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type AdCampaignReportRow = {
+  id: string;
+  org_id: string;
+  campaign_id: string;
+  report_date: string;
+  impressions: number;
+  clicks: number;
+  leads_count: number;
+  spend: number;
+  created_at: string;
+}
+
+// ── Module Admin (0014) ────────────────────────────────────────────────────
+export type DocumentType = "devis" | "facture" | "contrat";
+export type DocumentStatus =
+  | "draft"
+  | "sent"
+  | "signed"
+  | "paid"
+  | "overdue"
+  | "cancelled";
+export type ReminderChannel = "sms" | "email";
+
+export type DocumentRow = {
+  id: string;
+  org_id: string;
+  doc_type: DocumentType;
+  title: string;
+  recipient_name: string | null;
+  recipient_email: string | null;
+  recipient_phone: string | null;
+  content: Json;
+  amount: number | null;
+  due_date: string | null;
+  status: DocumentStatus;
+  signed_at: string | null;
+  signature_url: string | null;
+  file_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type PaymentReminderRow = {
+  id: string;
+  org_id: string;
+  document_id: string;
+  reminder_number: number;
+  channel: ReminderChannel;
+  sent_at: string;
 }
 
 // ── Schéma `Database` consommé par les clients Supabase typés ────────────────
@@ -314,6 +497,56 @@ export interface Database {
         WithDefaults<AuditLogRow, CommonGen | "payload">,
         Partial<AuditLogRow>
       >;
+      review_requests: TableDef<
+        ReviewRequestRow,
+        WithDefaults<ReviewRequestRow, CommonGen | "status">,
+        Partial<ReviewRequestRow>
+      >;
+      reviews: TableDef<
+        ReviewRow,
+        WithDefaults<ReviewRow, CommonGen | "source" | "sentiment" | "received_at">,
+        Partial<ReviewRow>
+      >;
+      private_feedback: TableDef<
+        PrivateFeedbackRow,
+        WithDefaults<PrivateFeedbackRow, CommonGen | "handled">,
+        Partial<PrivateFeedbackRow>
+      >;
+      manager_action_requests: TableDef<
+        ManagerActionRequestRow,
+        WithDefaults<ManagerActionRequestRow, CommonGen | "updated_at" | "risk" | "status" | "payload">,
+        Partial<ManagerActionRequestRow>
+      >;
+      calls: TableDef<
+        CallRow,
+        WithDefaults<CallRow, CommonGen | "updated_at" | "status" | "duration_seconds">,
+        Partial<CallRow>
+      >;
+      phone_settings: TableDef<
+        PhoneSettingsRow,
+        WithDefaults<PhoneSettingsRow, CommonGen | "updated_at" | "greeting_message" | "active_hours" | "auto_sms_on_miss">,
+        Partial<PhoneSettingsRow>
+      >;
+      ad_campaigns: TableDef<
+        AdCampaignRow,
+        WithDefaults<AdCampaignRow, CommonGen | "updated_at" | "status" | "platform" | "budget" | "duration_days">,
+        Partial<AdCampaignRow>
+      >;
+      ad_campaign_reports: TableDef<
+        AdCampaignReportRow,
+        WithDefaults<AdCampaignReportRow, CommonGen | "impressions" | "clicks" | "leads_count" | "spend">,
+        Partial<AdCampaignReportRow>
+      >;
+      documents: TableDef<
+        DocumentRow,
+        WithDefaults<DocumentRow, CommonGen | "updated_at" | "content" | "status">,
+        Partial<DocumentRow>
+      >;
+      payment_reminders: TableDef<
+        PaymentReminderRow,
+        WithDefaults<PaymentReminderRow, "id" | "sent_at">,
+        Partial<PaymentReminderRow>
+      >;
     };
     Views: Record<string, never>;
     CompositeTypes: Record<string, never>;
@@ -341,6 +574,14 @@ export interface Database {
         };
         Returns: string;
       };
+      create_private_feedback_for_request: {
+        Args: {
+          p_request_id: string;
+          p_rating: number;
+          p_message: string;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       formula: Formula;
@@ -356,6 +597,12 @@ export interface Database {
       campaign_trigger: CampaignTrigger;
       channel: Channel;
       usage_metric: UsageMetric;
+      review_request_status: ReviewRequestStatus;
+      review_source: ReviewSource;
+      review_sentiment: ReviewSentiment;
+      manager_action_status: ManagerActionStatus;
+      manager_action_risk: ManagerActionRisk;
+      call_status: CallStatus;
     };
   };
 }

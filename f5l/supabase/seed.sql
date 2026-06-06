@@ -85,18 +85,20 @@ values (
   'loyalty', 'weekly', '1990-05-12'
 ) on conflict (id) do nothing;
 
--- ── 6. Carte de fidélité (rattachée au contact B2C) ─────────────────────────
+-- ── 6. Carte de fidélité (rattachée au contact B2C) — 65 pts (étape 4) ──────
 insert into public.loyalty_cards (id, org_id, contact_id, points, card_token)
 values (
   '44444444-4444-4444-4444-444444444444',
   '11111111-1111-1111-1111-111111111111',
   '33333333-3333-3333-3333-333333333332',
-  120, 'demo-card-token'
+  65, 'demo-card-token'
 ) on conflict (id) do nothing;
 
+-- 3 transactions, somme = 65 : +30 et +50 (gains), -15 (rachat).
 insert into public.loyalty_transactions (org_id, card_id, delta_points, reason)
 select '11111111-1111-1111-1111-111111111111',
-       '44444444-4444-4444-4444-444444444444', 120, 'earn'
+       '44444444-4444-4444-4444-444444444444', v.delta, v.reason::loyalty_reason
+from (values (30, 'earn'), (50, 'earn'), (-15, 'redeem')) as v(delta, reason)
 where not exists (
   select 1 from public.loyalty_transactions
   where card_id = '44444444-4444-4444-4444-444444444444'
@@ -126,12 +128,97 @@ where not exists (
 
 insert into public.campaigns (org_id, trigger, channel, template, active)
 select '11111111-1111-1111-1111-111111111111', 'birthday', 'sms',
-       '{"text": "Joyeux anniversaire {{name}} ! Un cadeau vous attend en boutique."}'::jsonb,
+       '{
+          "name": "Anniversaire client",
+          "subject": null,
+          "body": "Joyeux anniversaire {{prenom}} ! Un cadeau vous attend à la Boulangerie Démo.",
+          "offer": "Viennoiserie offerte",
+          "inactiveDays": null
+        }'::jsonb,
        true
 where not exists (
   select 1 from public.campaigns
   where org_id = '11111111-1111-1111-1111-111111111111'
     and trigger = 'birthday' and channel = 'sms'
+);
+
+update public.campaigns
+set template = '{
+  "name": "Anniversaire client",
+  "subject": null,
+  "body": "Joyeux anniversaire {{prenom}} ! Un cadeau vous attend à la Boulangerie Démo.",
+  "offer": "Viennoiserie offerte",
+  "inactiveDays": null
+}'::jsonb
+where org_id = '11111111-1111-1111-1111-111111111111'
+  and trigger = 'birthday'
+  and channel = 'sms'
+  and not (template ? 'body');
+
+insert into public.campaigns (org_id, trigger, channel, template, active)
+select '11111111-1111-1111-1111-111111111111', 'inactive', 'email',
+       '{
+          "name": "Relance client inactif",
+          "subject": "Votre boulangerie vous garde une douceur",
+          "body": "Bonjour {{prenom}}, cela fait un moment que nous ne vous avons pas vu. Passez cette semaine et profitez de votre offre fidélité.",
+          "offer": "-10% sur votre prochain passage",
+          "inactiveDays": 30
+        }'::jsonb,
+       true
+where not exists (
+  select 1 from public.campaigns
+  where org_id = '11111111-1111-1111-1111-111111111111'
+    and trigger = 'inactive' and channel = 'email'
+);
+
+insert into public.campaigns (org_id, trigger, channel, template, active)
+select '11111111-1111-1111-1111-111111111111', 'post_purchase', 'sms',
+       '{
+          "name": "Merci après passage",
+          "subject": null,
+          "body": "Merci {{prenom}} pour votre passage ! Votre carte fidélité a été mise à jour.",
+          "offer": null,
+          "inactiveDays": null
+        }'::jsonb,
+       false
+where not exists (
+  select 1 from public.campaigns
+  where org_id = '11111111-1111-1111-1111-111111111111'
+    and trigger = 'post_purchase' and channel = 'sms'
+);
+
+-- Démo réputation conforme (module désactivé sur Business, données prêtes si activé).
+insert into public.review_requests (org_id, contact_id, channel, status, dedupe_key, sent_at)
+select '11111111-1111-1111-1111-111111111111',
+       '33333333-3333-3333-3333-333333333332',
+       'sms', 'sent', 'sms:33333333-3333-3333-3333-333333333332:demo', now()
+where not exists (
+  select 1 from public.review_requests
+  where org_id = '11111111-1111-1111-1111-111111111111'
+    and dedupe_key = 'sms:33333333-3333-3333-3333-333333333332:demo'
+);
+
+insert into public.reviews (org_id, contact_id, source, rating, author_name, content, sentiment, response_draft)
+select '11111111-1111-1111-1111-111111111111',
+       '33333333-3333-3333-3333-333333333332',
+       'google', 5, 'Marie Dupont',
+       'Très bonne boulangerie, accueil chaleureux.',
+       'positive',
+       'Merci Marie pour votre avis, à très vite à la boulangerie !'
+where not exists (
+  select 1 from public.reviews
+  where org_id = '11111111-1111-1111-1111-111111111111'
+    and author_name = 'Marie Dupont'
+);
+
+insert into public.private_feedback (org_id, contact_id, rating, message, handled)
+select '11111111-1111-1111-1111-111111111111',
+       '33333333-3333-3333-3333-333333333332',
+       3, 'La file était un peu longue samedi matin.', false
+where not exists (
+  select 1 from public.private_feedback
+  where org_id = '11111111-1111-1111-1111-111111111111'
+    and message = 'La file était un peu longue samedi matin.'
 );
 
 -- ── 9. Données de démo CRM (étape 2) ────────────────────────────────────────
@@ -183,3 +270,60 @@ insert into public.site_content (org_id, block_key, block_type, content, positio
    '{"days":[{"label":"Lundi","open":"07:00","close":"19:30","closed":false},{"label":"Mardi","open":"07:00","close":"19:30","closed":false},{"label":"Mercredi","open":"07:00","close":"19:30","closed":false},{"label":"Jeudi","open":"07:00","close":"19:30","closed":false},{"label":"Vendredi","open":"07:00","close":"19:30","closed":false},{"label":"Samedi","open":"07:00","close":"19:30","closed":false},{"label":"Dimanche","open":"08:00","close":"13:00","closed":false}]}'::jsonb,
    2, true)
 on conflict (org_id, block_key) do nothing;
+
+-- ── 11. Modules nouveaux (étapes Phase 1) ────────────────────────────────────
+-- Active phone/acquisition/admin pour l'org démo.
+insert into public.org_modules (org_id, module_key, enabled) values
+  ('11111111-1111-1111-1111-111111111111', 'phone',       true),
+  ('11111111-1111-1111-1111-111111111111', 'acquisition', true),
+  ('11111111-1111-1111-1111-111111111111', 'admin',       true)
+on conflict (org_id, module_key) do update set enabled = excluded.enabled;
+
+-- Téléphone — un message vocal et un appel manqué.
+insert into public.calls (org_id, caller_phone, caller_name, summary, status, duration_seconds)
+select '11111111-1111-1111-1111-111111111111', '+33700000010', 'Numéro inconnu',
+       'Recherche d''une baguette tradition pour mariage samedi.', 'voicemail', 28
+where not exists (select 1 from public.calls
+  where org_id = '11111111-1111-1111-1111-111111111111' and caller_phone = '+33700000010');
+
+insert into public.calls (org_id, caller_phone, caller_name, summary, status, duration_seconds)
+select '11111111-1111-1111-1111-111111111111', '+33700000011', null,
+       'Appel manqué — aucun message.', 'missed', 0
+where not exists (select 1 from public.calls
+  where org_id = '11111111-1111-1111-1111-111111111111' and caller_phone = '+33700000011');
+
+-- Paramètres téléphone par défaut.
+insert into public.phone_settings (org_id, greeting_message, transfer_number, auto_sms_on_miss)
+values ('11111111-1111-1111-1111-111111111111',
+        'Bonjour, vous êtes bien à la Boulangerie Démo. Laissez votre message après le bip, nous vous rappelons très vite.',
+        '+33123456789', true)
+on conflict (org_id) do nothing;
+
+-- Acquisition — une campagne active avec un rapport.
+insert into public.ad_campaigns (id, org_id, title, objective, platform, budget, duration_days, status, ad_copy)
+select 'aaaaaaaa-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111',
+       'Promo printemps — viennoiseries', 'promo', 'both', 150.00, 21, 'active',
+       'Profitez de -15% sur nos viennoiseries cette semaine à la Boulangerie Démo.'
+where not exists (select 1 from public.ad_campaigns
+  where id = 'aaaaaaaa-1111-1111-1111-111111111111');
+
+insert into public.ad_campaign_reports (org_id, campaign_id, report_date, impressions, clicks, leads_count, spend)
+select '11111111-1111-1111-1111-111111111111', 'aaaaaaaa-1111-1111-1111-111111111111',
+       current_date - 1, 1240, 87, 6, 22.50
+where not exists (select 1 from public.ad_campaign_reports
+  where campaign_id = 'aaaaaaaa-1111-1111-1111-111111111111' and report_date = current_date - 1);
+
+-- Admin — un devis et une facture.
+insert into public.documents (id, org_id, doc_type, title, recipient_name, recipient_email, recipient_phone, amount, due_date, status)
+select 'bbbbbbbb-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111',
+       'devis', 'Devis 50 baguettes — mariage Dupont',
+       'Jean Dupont', 'jean@example.fr', '+33700000020', 65.00, current_date + 14, 'sent'
+where not exists (select 1 from public.documents
+  where id = 'bbbbbbbb-1111-1111-1111-111111111111');
+
+insert into public.documents (id, org_id, doc_type, title, recipient_name, recipient_email, recipient_phone, amount, due_date, status)
+select 'cccccccc-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111',
+       'facture', 'Facture mensuelle Restaurant Le Voisin',
+       'Restaurant Le Voisin', 'contact@levoisin.fr', '+33600000001', 480.00, current_date - 7, 'sent'
+where not exists (select 1 from public.documents
+  where id = 'cccccccc-1111-1111-1111-111111111111');

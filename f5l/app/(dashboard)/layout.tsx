@@ -11,6 +11,20 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   const navItems: NavItem[] = [{ href: "/", label: "Tableau de bord" }];
   if (ctx.enabledModules.has("site")) navItems.push({ href: "/site", label: "Mon site" });
   if (ctx.enabledModules.has("crm")) navItems.push({ href: "/crm", label: "CRM" });
+  if (ctx.enabledModules.has("loyalty_card"))
+    navItems.push({ href: "/loyalty", label: "Fidélité" });
+  if (ctx.enabledModules.has("loyalty_agent"))
+    navItems.push({ href: "/loyalty-agent", label: "Agent Fidélisation" });
+  if (ctx.enabledModules.has("manager"))
+    navItems.push({ href: "/manager", label: "Manager" });
+  if (ctx.enabledModules.has("reputation"))
+    navItems.push({ href: "/reputation", label: "Réputation" });
+  if (ctx.enabledModules.has("phone"))
+    navItems.push({ href: "/telephone", label: "Téléphone" });
+  if (ctx.enabledModules.has("acquisition"))
+    navItems.push({ href: "/acquisition", label: "Publicité" });
+  if (ctx.enabledModules.has("admin"))
+    navItems.push({ href: "/admin", label: "Mes documents" });
 
   return (
     <div className="min-h-screen">

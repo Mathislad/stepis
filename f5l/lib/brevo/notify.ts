@@ -112,3 +112,107 @@ export async function notifyNewLead(org: NotifyOrg, lead: NotifyLead): Promise<v
     }
   }
 }
+
+/**
+ * Envoie au client final le lien de sa carte de fidélité (email + SMS).
+ * TOLÉRANT AUX PANNES — ne lève JAMAIS :
+ *  - pas de `BREVO_API_KEY` → on ignore (warn) ;
+ *  - contact sans téléphone NI email → on ignore (warn), pas d'exception ;
+ *  - chaque envoi isolé (`Promise.allSettled`), échecs loggés.
+ */
+export async function sendLoyaltyCardLink(params: {
+  orgName: string;
+  contact: { name: string | null; phone: string | null; email: string | null };
+  url: string;
+}): Promise<void> {
+  if (!process.env.BREVO_API_KEY) {
+    console.warn("[brevo] BREVO_API_KEY absente — lien carte non envoyé.");
+    return;
+  }
+  if (!params.contact.phone && !params.contact.email) {
+    console.warn("[brevo] contact sans téléphone ni e-mail — lien carte non envoyé.");
+    return;
+  }
+
+  const sender = senderEmail();
+  const tasks: Array<Promise<unknown>> = [];
+
+  if (params.contact.email) {
+    tasks.push(
+      brevoPost("/smtp/email", {
+        sender,
+        to: [{ email: params.contact.email, name: params.contact.name ?? undefined }],
+        subject: `Votre carte de fidélité — ${params.orgName}`,
+        htmlContent: `
+          <p>Bonjour ${esc(params.contact.name) || ""},</p>
+          <p>Voici le lien de votre carte de fidélité ${esc(params.orgName)} :</p>
+          <p><a href="${params.url}">${params.url}</a></p>
+        `,
+      }),
+    );
+  }
+
+  if (params.contact.phone) {
+    tasks.push(
+      brevoPost("/transactionalSMS/sms", {
+        sender: smsSender(),
+        recipient: params.contact.phone,
+        content: `Votre carte de fidélité ${params.orgName} : ${params.url}`,
+      }),
+    );
+  }
+
+  const results = await Promise.allSettled(tasks);
+  for (const r of results) {
+    if (r.status === "rejected") {
+      console.error("[brevo] lien carte échoué:", r.reason);
+    }
+  }
+}
+
+export async function notifyManagerActionRequest(params: {
+  org: NotifyOrg;
+  action: string;
+  agent: string;
+  risk: string;
+}): Promise<void> {
+  if (!process.env.BREVO_API_KEY) {
+    console.warn("[brevo] BREVO_API_KEY absente — notification Manager ignorée.");
+    return;
+  }
+  if (!params.org.contact_email && !params.org.contact_phone) return;
+
+  const tasks: Array<Promise<unknown>> = [];
+  if (params.org.contact_email) {
+    tasks.push(
+      brevoPost("/smtp/email", {
+        sender: senderEmail(),
+        to: [{ email: params.org.contact_email, name: params.org.name }],
+        subject: `Validation requise — ${params.org.name}`,
+        htmlContent: `
+          <h2>Une action F5L attend votre validation</h2>
+          <p><strong>Agent :</strong> ${esc(params.agent)}</p>
+          <p><strong>Risque :</strong> ${esc(params.risk)}</p>
+          <p><strong>Action :</strong> ${esc(params.action)}</p>
+          <p>Ouvrez le Manager F5L pour approuver, refuser ou exécuter l'action.</p>
+        `,
+      }),
+    );
+  }
+  if (params.org.contact_phone) {
+    tasks.push(
+      brevoPost("/transactionalSMS/sms", {
+        sender: smsSender(),
+        recipient: params.org.contact_phone,
+        content: `F5L Manager : validation requise (${params.agent}) - ${params.action}`,
+      }),
+    );
+  }
+
+  const results = await Promise.allSettled(tasks);
+  for (const r of results) {
+    if (r.status === "rejected") {
+      console.error("[brevo] notification Manager échouée:", r.reason);
+    }
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState } from "react";
 import { captureLeadAction, type LeadFormState } from "@/lib/site/actions";
 
 const INITIAL: LeadFormState = { ok: false, error: null };
@@ -10,11 +10,6 @@ const inputCls =
 
 export function LeadForm({ slug }: { slug: string }) {
   const [state, formAction, pending] = useActionState(captureLeadAction, INITIAL);
-  const [sourceUrl, setSourceUrl] = useState("");
-
-  useEffect(() => {
-    setSourceUrl(window.location.href);
-  }, []);
 
   if (state.ok) {
     return (
@@ -30,25 +25,36 @@ export function LeadForm({ slug }: { slug: string }) {
       className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
     >
       <input type="hidden" name="slug" value={slug} />
-      <input type="hidden" name="sourceUrl" value={sourceUrl} />
 
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-zinc-600">Nom *</span>
-          <input name="name" required className={inputCls} placeholder="Votre nom" />
+          <input name="name" required maxLength={120} className={inputCls} placeholder="Votre nom" />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-zinc-600">Téléphone *</span>
-          <input name="phone" required className={inputCls} placeholder="06 12 34 56 78" />
+          <input name="phone" required maxLength={40} className={inputCls} placeholder="06 12 34 56 78" />
         </label>
       </div>
       <label className="flex flex-col gap-1 text-sm">
         <span className="text-zinc-600">E-mail</span>
-        <input name="email" type="email" className={inputCls} placeholder="vous@email.fr" />
+        <input
+          name="email"
+          type="email"
+          maxLength={180}
+          className={inputCls}
+          placeholder="vous@email.fr"
+        />
       </label>
       <label className="flex flex-col gap-1 text-sm">
         <span className="text-zinc-600">Message</span>
-        <textarea name="message" rows={4} className={inputCls} placeholder="Votre message…" />
+        <textarea
+          name="message"
+          rows={4}
+          maxLength={1200}
+          className={inputCls}
+          placeholder="Votre message…"
+        />
       </label>
 
       {state.error && (
