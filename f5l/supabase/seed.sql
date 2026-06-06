@@ -163,3 +163,23 @@ where not exists (
   select 1 from public.leads
   where org_id = '11111111-1111-1111-1111-111111111111' and email = 'sophie.bernard@example.fr'
 );
+
+-- ── 10. Site éditable de démo (étape 3) ─────────────────────────────────────
+-- Coordonnées de notification du commerçant (Brevo).
+update public.organizations
+set contact_phone = '+33123456789',
+    contact_email = 'demo@stepis.fr'
+where id = '11111111-1111-1111-1111-111111111111';
+
+-- Blocs de contenu publiés → /p/boulangerie-demo non vide.
+insert into public.site_content (org_id, block_key, block_type, content, position, published) values
+  ('11111111-1111-1111-1111-111111111111', 'welcome', 'text',
+   '{"title":"Bienvenue à la Boulangerie Démo","body":"Pain frais cuit sur place, viennoiseries maison et accueil chaleureux au cœur du quartier. Passez nous voir !"}'::jsonb,
+   0, true),
+  ('11111111-1111-1111-1111-111111111111', 'prix-baguette', 'price',
+   '{"label":"Baguette tradition","amount":"1,30","unit":"€"}'::jsonb,
+   1, true),
+  ('11111111-1111-1111-1111-111111111111', 'horaires', 'hours',
+   '{"days":[{"label":"Lundi","open":"07:00","close":"19:30","closed":false},{"label":"Mardi","open":"07:00","close":"19:30","closed":false},{"label":"Mercredi","open":"07:00","close":"19:30","closed":false},{"label":"Jeudi","open":"07:00","close":"19:30","closed":false},{"label":"Vendredi","open":"07:00","close":"19:30","closed":false},{"label":"Samedi","open":"07:00","close":"19:30","closed":false},{"label":"Dimanche","open":"08:00","close":"13:00","closed":false}]}'::jsonb,
+   2, true)
+on conflict (org_id, block_key) do nothing;

@@ -52,6 +52,8 @@ export type OrganizationRow = {
   slug: string;
   sector: string | null;
   formula: Formula;
+  contact_phone: string | null; // 0003 — notifications Brevo
+  contact_email: string | null; // 0003 — notifications Brevo
   created_at: string;
   updated_at: string;
 }
@@ -327,6 +329,17 @@ export interface Database {
       convert_lead_to_contact: {
         Args: { p_lead_id: string; p_type: ContactType };
         Returns: ContactRow;
+      };
+      create_public_lead: {
+        Args: {
+          p_slug: string;
+          p_name: string;
+          p_phone: string;
+          p_email: string;
+          p_message: string;
+          p_source_url?: string | null;
+        };
+        Returns: string;
       };
     };
     Enums: {

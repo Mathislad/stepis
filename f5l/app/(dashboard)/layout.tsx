@@ -9,6 +9,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   // Navigation construite côté serveur depuis les modules activés de l'org.
   const navItems: NavItem[] = [{ href: "/", label: "Tableau de bord" }];
+  if (ctx.enabledModules.has("site")) navItems.push({ href: "/site", label: "Mon site" });
   if (ctx.enabledModules.has("crm")) navItems.push({ href: "/crm", label: "CRM" });
 
   return (
