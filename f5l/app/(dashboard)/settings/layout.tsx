@@ -7,6 +7,7 @@ const TABS = [
   { href: "/settings/org", label: "Mon commerce" },
   { href: "/settings/profile", label: "Mon profil" },
   { href: "/settings/members", label: "Mon équipe" },
+  { href: "/settings/automation", label: "Automatisations" },
   { href: "/settings/billing", label: "Abonnement" },
 ];
 

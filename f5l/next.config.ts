@@ -50,6 +50,36 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  // DECISION: pivot F5L Acquisition. Les anciens chemins (legacy V0) sont
+  // redirigés vers les nouveaux pour ne pas casser les bookmarks existants.
+  async redirects() {
+    return [
+      // Modules actifs renommés
+      { source: "/crm", destination: "/prospects", permanent: false },
+      { source: "/crm/leads", destination: "/prospects?filter=new", permanent: false },
+      { source: "/crm/new", destination: "/prospects/nouveau", permanent: false },
+      { source: "/crm/:contactId", destination: "/prospects/:contactId", permanent: false },
+      { source: "/acquisition", destination: "/campagnes", permanent: false },
+      { source: "/acquisition/new", destination: "/campagnes/nouvelle", permanent: false },
+      { source: "/acquisition/:campaignId", destination: "/campagnes/:campaignId", permanent: false },
+      { source: "/site", destination: "/ma-page", permanent: false },
+      { source: "/site/offers", destination: "/ma-page/offres", permanent: false },
+      { source: "/site/edit/:blockKey", destination: "/ma-page/edit", permanent: false },
+      // Modules verrouillés (renvoient tous vers /bientot/[key])
+      { source: "/loyalty", destination: "/bientot/loyalty", permanent: false },
+      { source: "/loyalty/:path*", destination: "/bientot/loyalty", permanent: false },
+      { source: "/loyalty-agent", destination: "/bientot/loyalty-agent", permanent: false },
+      { source: "/loyalty-agent/:path*", destination: "/bientot/loyalty-agent", permanent: false },
+      { source: "/telephone", destination: "/bientot/phone", permanent: false },
+      { source: "/telephone/:path*", destination: "/bientot/phone", permanent: false },
+      { source: "/reputation", destination: "/bientot/reputation", permanent: false },
+      { source: "/reputation/:path*", destination: "/bientot/reputation", permanent: false },
+      { source: "/admin", destination: "/bientot/admin", permanent: false },
+      { source: "/admin/:path*", destination: "/bientot/admin", permanent: false },
+      { source: "/manager", destination: "/bientot/manager", permanent: false },
+      { source: "/manager/:path*", destination: "/bientot/manager", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -3,38 +3,29 @@ import { requireAuth } from "@/lib/auth/require-module";
 import { signOut } from "@/lib/auth/actions";
 import { Sidebar, type SidebarGroup, type SidebarItem } from "@/components/dashboard/Sidebar";
 import { TabBar, type TabBarItem } from "@/components/dashboard/TabBar";
-import type { ModuleKey } from "@/types/database";
 
-// DECISION: regroupement Apple-style des modules en 4 catégories visibles
-// dans la sidebar. Le tableau de bord est en tête, puis les groupes.
-const GROUP_TEMPLATE: { label: string; items: SidebarItem[] }[] = [
+// DECISION: refonte F5L Acquisition. 4 sections actives (Dashboard, Prospects,
+// Campagnes, Ma page), 6 modules « Bientôt », 1 section Compte.
+const GROUPS: SidebarGroup[] = [
   {
-    label: "Votre activité",
+    label: "F5L Acquisition",
     items: [
       { href: "/", label: "Tableau de bord", icon: "▦" },
-      { href: "/crm", label: "Mes clients", icon: "♥", module: "crm" },
-      { href: "/site", label: "Mon site", icon: "◉", module: "site" },
+      { href: "/prospects", label: "Mes prospects", icon: "♥" },
+      { href: "/campagnes", label: "Mes campagnes", icon: "◐" },
+      { href: "/ma-page", label: "Ma page", icon: "◉" },
     ],
   },
   {
-    label: "Automatisation",
+    label: "Bientôt disponible",
     items: [
-      { href: "/loyalty-agent", label: "Fidélisation", icon: "✦", module: "loyalty_agent" },
-      { href: "/acquisition", label: "Publicité", icon: "◐", module: "acquisition" },
-      { href: "/telephone", label: "Téléphone", icon: "☏", module: "phone" },
+      { href: "/bientot/loyalty-agent", label: "Fidélisation", icon: "✦", locked: true },
+      { href: "/bientot/phone", label: "Téléphone IA", icon: "☏", locked: true },
+      { href: "/bientot/reputation", label: "Réputation", icon: "★", locked: true },
+      { href: "/bientot/loyalty", label: "Carte fidélité", icon: "▥", locked: true },
+      { href: "/bientot/admin", label: "Documents", icon: "▤", locked: true },
+      { href: "/bientot/manager", label: "Manager IA", icon: "♛", locked: true },
     ],
-  },
-  {
-    label: "Gestion",
-    items: [
-      { href: "/admin", label: "Mes documents", icon: "▤", module: "admin" },
-      { href: "/manager", label: "Manager", icon: "♛", module: "manager" },
-      { href: "/reputation", label: "Réputation", icon: "★", module: "reputation" },
-    ],
-  },
-  {
-    label: "Outils",
-    items: [{ href: "/loyalty", label: "Carte fidélité", icon: "▥", module: "loyalty_card" }],
   },
   {
     label: "Compte",
@@ -45,23 +36,24 @@ const GROUP_TEMPLATE: { label: string; items: SidebarItem[] }[] = [
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const ctx = await requireAuth();
 
-  // Filtre les items selon les modules activés. Le Tableau de bord est toujours visible.
-  const groups: SidebarGroup[] = GROUP_TEMPLATE.map((g) => ({
-    label: g.label,
-    items: g.items.filter((item) => !item.module || ctx.enabledModules.has(item.module as ModuleKey)),
-  })).filter((g) => g.items.length > 0);
+  // Tab bar mobile : Accueil + 4 onglets principaux.
+  const tabItems: TabBarItem[] = [
+    { href: "/", label: "Accueil", icon: "▦" },
+    { href: "/prospects", label: "Prospects", icon: "♥" },
+    { href: "/campagnes", label: "Campagnes", icon: "◐" },
+    { href: "/ma-page", label: "Ma page", icon: "◉" },
+    { href: "/settings", label: "Réglages", icon: "⚙" },
+  ];
 
-  // Tab bar mobile : 5 onglets principaux (Accueil + 4 modules clés selon ce qui est activé).
-  const allItems: SidebarItem[] = groups.flatMap((g) => g.items);
-  const tabItems: TabBarItem[] = allItems.slice(0, 5).map((it) => ({
-    href: it.href,
-    label: it.label.length > 9 ? it.label.split(" ")[0] : it.label,
-    icon: it.icon,
+  // SidebarItem est typé pour le composant Sidebar (sans dépendance ModuleKey).
+  const sidebarGroups: SidebarGroup[] = GROUPS.map((g) => ({
+    label: g.label,
+    items: g.items as SidebarItem[],
   }));
 
   return (
     <div className="f5l-shell">
-      <Sidebar groups={groups} orgName={ctx.org.name} />
+      <Sidebar groups={sidebarGroups} orgName={ctx.org.name} />
 
       <div className="f5l-content">
         <header className="f5l-header">

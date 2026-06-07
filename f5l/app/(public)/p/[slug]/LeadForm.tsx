@@ -6,15 +6,19 @@ import { captureLeadAction, type LeadFormState } from "@/lib/site/actions";
 const INITIAL: LeadFormState = { ok: false, error: null };
 
 const inputCls =
-  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 outline-none transition-colors focus:border-zinc-900";
+  "w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-400 outline-none transition-colors focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100";
 
 export function LeadForm({ slug }: { slug: string }) {
   const [state, formAction, pending] = useActionState(captureLeadAction, INITIAL);
 
   if (state.ok) {
     return (
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
-        Votre message a bien été envoyé, nous vous répondons très vite ! 🎉
+      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
+        <p className="text-2xl">🎉</p>
+        <p className="mt-2 text-lg font-semibold text-emerald-900">Bien reçu !</p>
+        <p className="mt-1 text-emerald-700">
+          Nous vous répondons très vite.
+        </p>
       </div>
     );
   }
@@ -22,38 +26,32 @@ export function LeadForm({ slug }: { slug: string }) {
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
     >
       <input type="hidden" name="slug" value={slug} />
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="text-zinc-600">Nom *</span>
-          <input name="name" required maxLength={120} className={inputCls} placeholder="Votre nom" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="font-medium text-zinc-700">Votre nom *</span>
+          <input name="name" required maxLength={120} className={inputCls} placeholder="Jean Dupont" />
         </label>
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="text-zinc-600">Téléphone *</span>
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="font-medium text-zinc-700">Téléphone *</span>
           <input name="phone" required maxLength={40} className={inputCls} placeholder="06 12 34 56 78" />
         </label>
       </div>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="text-zinc-600">E-mail</span>
-        <input
-          name="email"
-          type="email"
-          maxLength={180}
-          className={inputCls}
-          placeholder="vous@email.fr"
-        />
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="font-medium text-zinc-700">E-mail (optionnel)</span>
+        <input name="email" type="email" maxLength={180} className={inputCls} placeholder="jean@email.fr" />
       </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="text-zinc-600">Message</span>
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="font-medium text-zinc-700">Votre message</span>
         <textarea
           name="message"
           rows={4}
           maxLength={1200}
           className={inputCls}
-          placeholder="Votre message…"
+          placeholder="Quelques mots sur votre besoin…"
         />
       </label>
 
@@ -66,10 +64,13 @@ export function LeadForm({ slug }: { slug: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="mt-1 inline-flex items-center justify-center rounded-lg bg-zinc-900 px-5 py-2.5 font-semibold text-white transition-colors hover:bg-zinc-800 disabled:opacity-50"
+        className="rounded-lg bg-emerald-600 px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
       >
-        {pending ? "Envoi…" : "Envoyer"}
+        {pending ? "Envoi…" : "Envoyer ma demande"}
       </button>
+      <p className="text-center text-xs text-zinc-400">
+        Nous ne partagerons jamais vos coordonnées.
+      </p>
     </form>
   );
 }

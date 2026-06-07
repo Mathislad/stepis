@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ModuleKey } from "@/types/database";
 
 export interface SidebarItem {
   href: string;
   label: string;
   icon: string;
-  module?: ModuleKey;
+  locked?: boolean;
 }
 
 export interface SidebarGroup {
@@ -17,8 +16,8 @@ export interface SidebarGroup {
 }
 
 /**
- * Sidebar dashboard avec groupes thématiques et lien actif (barre bleue).
- * `aria-current="page"` est posé sur l'item dont le pathname correspond.
+ * Sidebar dashboard avec groupes thématiques. Les items `locked` ouvrent
+ * /bientot/[key] (badge « Prochainement »).
  */
 export function Sidebar({
   groups,
@@ -40,7 +39,7 @@ export function Sidebar({
           </span>
           <div className="min-w-0">
             <p className="truncate text-[13px] font-semibold leading-tight">{orgName}</p>
-            <p className="text-[11px] leading-tight text-[var(--muted)]">Console F5L</p>
+            <p className="text-[11px] leading-tight text-[var(--muted)]">F5L Acquisition</p>
           </div>
         </Link>
       </div>
@@ -56,11 +55,23 @@ export function Sidebar({
                     href={item.href}
                     className="f5l-sidebar-link"
                     aria-current={isActive(item.href) ? "page" : undefined}
+                    style={item.locked ? { opacity: 0.6 } : undefined}
                   >
                     <span className="f5l-sidebar-icon" aria-hidden>
-                      {item.icon}
+                      {item.locked ? "🔒" : item.icon}
                     </span>
-                    <span>{item.label}</span>
+                    <span className="flex-1">{item.label}</span>
+                    {item.locked && (
+                      <span
+                        className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider"
+                        style={{
+                          background: "rgba(191,90,242,0.12)",
+                          color: "var(--violet)",
+                        }}
+                      >
+                        Bientôt
+                      </span>
+                    )}
                   </Link>
                 </li>
               ))}
