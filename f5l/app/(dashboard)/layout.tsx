@@ -36,6 +36,10 @@ const GROUP_TEMPLATE: { label: string; items: SidebarItem[] }[] = [
     label: "Outils",
     items: [{ href: "/loyalty", label: "Carte fidélité", icon: "▥", module: "loyalty_card" }],
   },
+  {
+    label: "Compte",
+    items: [{ href: "/settings", label: "Réglages", icon: "⚙" }],
+  },
 ];
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {

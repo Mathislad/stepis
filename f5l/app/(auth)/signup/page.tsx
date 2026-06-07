@@ -1,25 +1,25 @@
 import Link from "next/link";
-import { LoginForm } from "@/components/auth/LoginForm";
+import { SignupForm } from "@/components/auth/SignupForm";
 
-export const metadata = { title: "Connexion — F5L" };
+export const metadata = { title: "Créer un compte — F5L" };
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="surface p-7">
       <div className="mb-6">
         <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--blue)] text-lg font-bold text-white">
           F
         </div>
-        <h1 className="text-xl font-semibold">Console F5L</h1>
+        <h1 className="text-xl font-semibold">Créer un compte F5L</h1>
         <p className="mt-1 text-sm text-[var(--text-2)]">
-          Connectez-vous pour piloter votre équipe d&apos;employés IA.
+          Votre équipe d&apos;employés IA, prête en 2 minutes.
         </p>
       </div>
-      <LoginForm />
+      <SignupForm />
       <p className="mt-5 text-center text-sm text-[var(--text-2)]">
-        Pas encore de compte ?{" "}
-        <Link href="/signup" className="text-[var(--blue)] hover:underline">
-          Créer mon compte
+        Déjà un compte ?{" "}
+        <Link href="/login" className="text-[var(--blue)] hover:underline">
+          Se connecter
         </Link>
       </p>
     </div>

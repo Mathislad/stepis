@@ -306,6 +306,38 @@ export type ManagerActionRequestRow = {
   updated_at: string;
 }
 
+// ── Onboarding (0015) ──────────────────────────────────────────────────────
+export type SubscriptionStatus =
+  | "trialing"
+  | "active"
+  | "past_due"
+  | "canceled"
+  | "incomplete";
+
+export type InvitationRow = {
+  id: string;
+  org_id: string;
+  email: string;
+  role: ProfileRole;
+  token: string;
+  invited_by: string | null;
+  accepted: boolean;
+  expires_at: string;
+  created_at: string;
+}
+
+export type SubscriptionRow = {
+  id: string;
+  org_id: string;
+  formula: Formula;
+  status: SubscriptionStatus;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  current_period_end: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 // ── Module Téléphone (0012) ────────────────────────────────────────────────
 export type CallStatus = "missed" | "answered" | "voicemail";
 
@@ -547,6 +579,16 @@ export interface Database {
         WithDefaults<PaymentReminderRow, "id" | "sent_at">,
         Partial<PaymentReminderRow>
       >;
+      invitations: TableDef<
+        InvitationRow,
+        WithDefaults<InvitationRow, CommonGen | "token" | "role" | "accepted" | "expires_at">,
+        Partial<InvitationRow>
+      >;
+      subscriptions: TableDef<
+        SubscriptionRow,
+        WithDefaults<SubscriptionRow, CommonGen | "updated_at" | "formula" | "status">,
+        Partial<SubscriptionRow>
+      >;
     };
     Views: Record<string, never>;
     CompositeTypes: Record<string, never>;
@@ -572,6 +614,14 @@ export interface Database {
           p_message: string;
           p_source_url?: string | null;
         };
+        Returns: string;
+      };
+      lookup_invitation: {
+        Args: { p_token: string };
+        Returns: { email: string; org_name: string; role: ProfileRole }[];
+      };
+      accept_invitation: {
+        Args: { p_token: string };
         Returns: string;
       };
       create_private_feedback_for_request: {
@@ -603,6 +653,7 @@ export interface Database {
       manager_action_status: ManagerActionStatus;
       manager_action_risk: ManagerActionRisk;
       call_status: CallStatus;
+      subscription_status: SubscriptionStatus;
     };
   };
 }

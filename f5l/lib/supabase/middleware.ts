@@ -12,7 +12,17 @@ import { requireEnv } from "@/lib/env";
  *  - /p              : site public éditable d'un commerce (par slug)
  *  - /api/cron       : tâches planifiées protégées par secret applicatif
  */
-const PUBLIC_PREFIXES = ["/login", "/auth", "/carte", "/feedback", "/p", "/api/cron"];
+const PUBLIC_PREFIXES = [
+  "/login",
+  "/signup",
+  "/accept-invitation",
+  "/auth",
+  "/carte",
+  "/feedback",
+  "/p",
+  "/api/cron",
+  "/api/webhooks",
+];
 
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PREFIXES.some(
