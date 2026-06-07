@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
  *
  * La logique métier vit dans lib/settings/subscription.ts (applyFormulaChange).
  */
-export async function POST(_request: NextRequest) {
+export async function POST() {
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json(
       { ok: true, message: "Stripe webhook stub — non configuré." },

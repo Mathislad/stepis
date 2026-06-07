@@ -54,16 +54,16 @@ values (
   'Camille Démo', 'owner'
 ) on conflict (id) do nothing;
 
--- ── 4. Modules (activation selon formule « business ») ──────────────────────
+-- ── 4. Modules (démo F5L Acquisition V1) ───────────────────────────────────
 insert into public.org_modules (org_id, module_key, enabled) values
   ('11111111-1111-1111-1111-111111111111', 'site',          true),
   ('11111111-1111-1111-1111-111111111111', 'crm',           true),
   ('11111111-1111-1111-1111-111111111111', 'lead_capture',  true),
-  ('11111111-1111-1111-1111-111111111111', 'loyalty_agent', true),
-  ('11111111-1111-1111-1111-111111111111', 'loyalty_card',  true),
+  ('11111111-1111-1111-1111-111111111111', 'acquisition',   true),
+  ('11111111-1111-1111-1111-111111111111', 'loyalty_agent', false),
+  ('11111111-1111-1111-1111-111111111111', 'loyalty_card',  false),
   ('11111111-1111-1111-1111-111111111111', 'reputation',    false),
   ('11111111-1111-1111-1111-111111111111', 'phone',         false),
-  ('11111111-1111-1111-1111-111111111111', 'acquisition',   false),
   ('11111111-1111-1111-1111-111111111111', 'admin',         false),
   ('11111111-1111-1111-1111-111111111111', 'manager',       false)
 on conflict (org_id, module_key) do nothing;
@@ -271,12 +271,11 @@ insert into public.site_content (org_id, block_key, block_type, content, positio
    2, true)
 on conflict (org_id, block_key) do nothing;
 
--- ── 11. Modules nouveaux (étapes Phase 1) ────────────────────────────────────
--- Active phone/acquisition/admin pour l'org démo.
+-- ── 11. Données avancées conservées en backlog, acquisition active en V1 ─────
 insert into public.org_modules (org_id, module_key, enabled) values
-  ('11111111-1111-1111-1111-111111111111', 'phone',       true),
+  ('11111111-1111-1111-1111-111111111111', 'phone',       false),
   ('11111111-1111-1111-1111-111111111111', 'acquisition', true),
-  ('11111111-1111-1111-1111-111111111111', 'admin',       true)
+  ('11111111-1111-1111-1111-111111111111', 'admin',       false)
 on conflict (org_id, module_key) do update set enabled = excluded.enabled;
 
 -- Téléphone — un message vocal et un appel manqué.

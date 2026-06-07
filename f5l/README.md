@@ -1,106 +1,86 @@
-# F5L — Plateforme (Étape 1 : Fondation)
+# F5L Acquisition
 
-Console SaaS multi-tenant de **Stepis** : chaque commerce client est un **tenant
-isolé**. Cette étape ne livre que la **fondation** (base de données, RLS, auth,
-garde de modules, conventions). Les modules (CRM, site, fidélisation, carte…)
-se brancheront dessus aux étapes suivantes.
+F5L Acquisition est le MVP vendable de Stepis : un systeme simple pour aider
+une entreprise locale a transformer un budget marketing en prospects, rendez-vous,
+devis et clients.
 
-> Codename produit : **F5L**. Marque : **Stepis**. Ce dossier est indépendant du
-> site vitrine (`../stepis_v2`).
+Le SaaS complet reste la vision long terme, mais la V1 est volontairement
+centree sur :
+
+- landing page locale,
+- capture de prospects,
+- suivi des prospects,
+- campagnes Meta / Google en mode brouillon,
+- reporting simple : leads, cout par lead, conversion.
 
 ## Stack
 
-- **Next.js 16** (App Router, TypeScript strict, Server Components par défaut)
-- **Supabase** — Postgres + Auth + Row Level Security + Storage
-- **Tailwind CSS v4** (thème sombre « Apple / iOS »)
-- **Brevo** (SMS/email) et **Anthropic** (IA) — *emplacements préparés, non implémentés*
-- Déploiement visé : **Vercel**
+- Next.js 16, React 19, TypeScript strict
+- Tailwind CSS v4
+- Supabase Auth + Postgres + RLS
+- Brevo, Anthropic, Stripe, Meta Ads et Google Ads en stubs gracieux
+- Deploiement vise : Vercel
 
-## Prérequis
-
-- Node ≥ 20, npm ≥ 10
-- [Supabase CLI](https://supabase.com/docs/guides/cli) (`supabase --version`)
-- Un projet Supabase (hébergé) **ou** Docker pour la stack locale
-
-## Démarrage rapide
+## Demarrage rapide
 
 ```bash
-# 1. Dépendances
 npm install
-
-# 2. Variables d'environnement
-cp .env.example .env.local        # puis renseigner les clés Supabase
-
-# 3. Base de données — au choix :
-
-#   A) Projet Supabase hébergé (recommandé)
-supabase link --project-ref <VOTRE-REF>
-supabase db push                  # applique supabase/migrations/*
-#   → puis charger le seed : coller supabase/seed.sql dans le SQL Editor
-#     (ou: psql "$DATABASE_URL" -f supabase/seed.sql)
-
-#   B) Stack Supabase locale (Docker)
-supabase start                    # démarre Postgres + Auth + Studio
-supabase db reset                 # applique migrations + seed.sql automatiquement
-
-# 4. Lancer l'app
-npm run dev                       # http://localhost:3000
+cp .env.example .env.local
+npm run dev
 ```
 
-### Connexion de démo
+Avec les placeholders, l'application demarre et redirige vers `/setup`.
+Pour utiliser le dashboard, remplir les variables Supabase dans `.env.local`,
+puis appliquer les migrations et le seed.
 
-| Champ        | Valeur                 |
-|--------------|------------------------|
-| E-mail       | `owner@demo.f5l`       |
-| Mot de passe | `demo1234`             |
+```bash
+npx supabase link --project-ref <REF>
+npx supabase db push
+psql "$DATABASE_URL" -f supabase/seed.sql
+```
 
-Carte de fidélité publique (sans login) : `/carte/demo-card-token`
+Compte demo apres seed :
+
+| Champ | Valeur |
+|---|---|
+| E-mail | `owner@demo.f5l` |
+| Mot de passe | `demo1234` |
+
+Routes principales :
+
+- `/` : tableau de bord acquisition
+- `/prospects` : leads et suivi commercial
+- `/campagnes` : campagnes publicitaires
+- `/ma-page` : landing page
+- `/p/boulangerie-demo` : page publique demo
+- `/setup` : aide de configuration si Supabase manque
 
 ## Scripts
 
-| Commande            | Effet                                              |
-|---------------------|----------------------------------------------------|
-| `npm run dev`       | Serveur de développement                           |
-| `npm run build`     | Build de production                                |
-| `npm run start`     | Sert le build                                      |
-| `npm run lint`      | ESLint                                             |
-| `npm run typecheck` | `tsc --noEmit`                                      |
-| `npm run db:push`   | `supabase db push` (migrations → projet lié)       |
-| `npm run db:reset`  | `supabase db reset` (recrée la base locale + seed) |
+| Commande | Effet |
+|---|---|
+| `npm run dev` | Serveur de developpement |
+| `npm run build` | Build de production |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript sans emission |
+| `npm run db:push` | Applique les migrations Supabase |
+| `npm run db:reset` | Reset local Supabase |
 
-## Régénérer les types (optionnel)
+## Priorite produit
 
-Les types vivent dans `types/database.ts` (maintenus à la main pour l'Étape 1).
-Pour les régénérer depuis la base réelle :
+Toute nouvelle fonctionnalite doit repondre a une question :
 
-```bash
-supabase gen types typescript --linked > types/database.ts
-```
+> Est-ce que cela aide directement F5L a obtenir ou conserver un client pour
+> l'entreprise locale ?
 
-## Architecture (résumé)
+Si oui : priorite haute. Sinon : backlog.
 
-```
-Navigateur ──► proxy.ts ──────► refresh session + protection des routes
-                                   │
-   app/(auth)/login ──────────────┤  signIn() Server Action (lib/auth/actions)
-                                   │
-   app/(dashboard)/* ─────────────┤  requireAuth() / requireModule()
-        │                          │       │
-        │                          │       └─► getOrgContext() (lib/auth/context)
-        │                          │                 │
-        └─ tout accès données ─────┴────► lib/supabase (server | client | admin)
-                                                       │
-                                              Supabase Postgres
-                                          (RLS : org_id = current_org_id())
-```
+Modules non prioritaires en V1 : fidelisation, reputation, carte fidelite,
+telephone IA, administratif, manager IA. Ils peuvent apparaitre comme
+"bientot disponible", mais ne doivent pas etre vendus comme operationnels.
 
-Détails du modèle multi-tenant, de la stratégie RLS et de l'ajout d'un module :
-voir **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
+## Docs utiles
 
-## Sécurité
-
-- RLS active sur **100 %** des tables ; isolation par `org_id`.
-- Service-role réservé au serveur (`lib/supabase/admin.ts`, garde `server-only`).
-- En-têtes de sécurité (CSP, HSTS, etc.) dans `next.config.ts`.
-- Accès public de la carte de fidélité **uniquement** via la RPC
-  `get_loyalty_card_by_token` (aucune policy publique large).
+- [SETUP.md](./SETUP.md) : mise en route locale et deploiement
+- [MVP-CHECKLIST.md](./MVP-CHECKLIST.md) : checklist demo/client
+- [ARCHITECTURE.md](./ARCHITECTURE.md) : conventions multi-tenant/RLS

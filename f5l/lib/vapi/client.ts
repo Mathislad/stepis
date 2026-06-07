@@ -12,8 +12,9 @@ export interface VapiResult {
 
 export async function configureVapiAgent(
   orgId: string,
-  _settings: PhoneSettingsRow,
+  settings: PhoneSettingsRow,
 ): Promise<VapiResult> {
+  void settings;
   if (!process.env.VAPI_API_KEY) {
     return { configured: false, message: "Clé API Vapi non configurée." };
   }

@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/types/database";
-import { requireEnv } from "@/lib/env";
+import { hasSupabaseBrowserEnv, requireEnv } from "@/lib/env";
 
 /**
  * Préfixes accessibles SANS authentification :
@@ -11,8 +11,10 @@ import { requireEnv } from "@/lib/env";
  *  - /feedback       : feedback privé depuis une demande d'avis
  *  - /p              : site public éditable d'un commerce (par slug)
  *  - /api/cron       : tâches planifiées protégées par secret applicatif
+ *  - /setup          : écran d'aide quand Supabase n'est pas configuré
  */
 const PUBLIC_PREFIXES = [
+  "/setup",
   "/login",
   "/signup",
   "/accept-invitation",
@@ -36,6 +38,18 @@ function isPublicPath(pathname: string): boolean {
  * sous peine de déconnexions aléatoires (recommandation officielle Supabase).
  */
 export async function updateSession(request: NextRequest): Promise<NextResponse> {
+  const { pathname } = request.nextUrl;
+
+  if (!hasSupabaseBrowserEnv()) {
+    if (pathname === "/setup" || pathname.startsWith("/setup/")) {
+      return NextResponse.next({ request });
+    }
+    const url = request.nextUrl.clone();
+    url.pathname = "/setup";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient<Database>(
@@ -62,8 +76,6 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
 
   // Non connecté + route privée → vers /login
   if (!user && !isPublicPath(pathname)) {

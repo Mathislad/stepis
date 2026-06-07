@@ -16,12 +16,13 @@ export interface StripeResult {
   portalUrl?: string;
 }
 
-export async function createCheckoutSession(_params: {
+export async function createCheckoutSession(params: {
   orgId: string;
   formula: Formula;
   successUrl: string;
   cancelUrl: string;
 }): Promise<StripeResult> {
+  void params;
   if (!process.env.STRIPE_SECRET_KEY) {
     return { configured: false, message: "Stripe non configuré (clé manquante)." };
   }
@@ -31,17 +32,19 @@ export async function createCheckoutSession(_params: {
   };
 }
 
-export async function createBillingPortalSession(_params: {
+export async function createBillingPortalSession(params: {
   customerId: string;
   returnUrl: string;
 }): Promise<StripeResult> {
+  void params;
   if (!process.env.STRIPE_SECRET_KEY) {
     return { configured: false, message: "Stripe non configuré." };
   }
   return { configured: false, message: "Portail client Stripe à finaliser." };
 }
 
-export async function cancelSubscription(_subscriptionId: string): Promise<StripeResult> {
+export async function cancelSubscription(subscriptionId: string): Promise<StripeResult> {
+  void subscriptionId;
   if (!process.env.STRIPE_SECRET_KEY) {
     return { configured: false, message: "Stripe non configuré." };
   }

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentOrgId } from "@/lib/auth/context";
 import { FORMULA_PLANS } from "@/lib/billing/formulas";
+import { MODULE_LIST } from "@/lib/modules";
 import type { Formula, SubscriptionRow } from "@/types/database";
 
 export async function getMySubscription(): Promise<SubscriptionRow | null> {
@@ -15,8 +16,9 @@ export async function getMySubscription(): Promise<SubscriptionRow | null> {
 
 /**
  * Met à niveau / rétrograde la formule de l'org. Réécrit les `org_modules`
- * pour correspondre à la nouvelle formule, sans toucher aux modules
- * additionnels explicitement activés.
+ * pour correspondre à la nouvelle formule. Depuis le pivot F5L Acquisition,
+ * les modules hors acquisition restent en "bientôt disponible" et ne sont
+ * plus réactivés par inertie lors d'un changement de plan.
  *
  * NOTE: Stripe n'est pas appelé ici — le webhook Stripe (à brancher plus
  * tard) appellera cette fonction côté serveur après une mutation.
@@ -32,12 +34,13 @@ export async function applyFormulaChange(formula: Formula): Promise<void> {
     .from("subscriptions")
     .upsert({ org_id: orgId, formula, status: "active" }, { onConflict: "org_id" });
 
-  // 2. Active tous les modules par défaut de la nouvelle formule.
+  // 2. Aligne les modules sur le plan Acquisition.
   const plan = FORMULA_PLANS[formula];
-  const rows = plan.defaultModules.map((module_key) => ({
+  const enabled = new Set(plan.defaultModules);
+  const rows = MODULE_LIST.map(({ key }) => ({
     org_id: orgId,
-    module_key,
-    enabled: true,
+    module_key: key,
+    enabled: enabled.has(key),
   }));
   await supabase.from("org_modules").upsert(rows, { onConflict: "org_id,module_key" });
 }

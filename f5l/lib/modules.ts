@@ -22,16 +22,16 @@ export const FORMULA_RANK: Record<Formula, number> = {
 };
 
 export const MODULE_LIST: ModuleMeta[] = [
-  { key: "site",          label: "Site éditable",        description: "CMS-lite : offres, images, prix, textes.",        minFormula: "starter",  available: true },
-  { key: "crm",           label: "CRM",                  description: "Contacts B2B / B2C et journal d'activité.",       minFormula: "starter",  available: true },
-  { key: "lead_capture",  label: "Capture de leads",     description: "Formulaires du site → leads → contacts.",         minFormula: "starter",  available: true },
-  { key: "loyalty_agent", label: "Agent Fidélisation",   description: "Séquences déclenchées (anniversaire, inactivité).", minFormula: "business", available: true },
-  { key: "loyalty_card",  label: "Carte de fidélité",    description: "Points, paliers, scans QR.",                       minFormula: "business", available: true },
-  { key: "reputation",    label: "Réputation",           description: "Avis et e-réputation.",                            minFormula: "full",     available: true },
-  { key: "phone",         label: "Téléphone",            description: "Journal des appels et SMS automatiques.",          minFormula: "full",     available: true },
-  { key: "acquisition",   label: "Acquisition",          description: "Campagnes publicitaires Meta et Google.",          minFormula: "full",     available: true },
-  { key: "admin",         label: "Administratif",        description: "Devis, factures, contrats et relances.",            minFormula: "full",     available: true },
-  { key: "manager",       label: "Manager",              description: "Résumé quotidien et coordination des agents.",     minFormula: "full",     available: true },
+  { key: "site",          label: "Landing pages",        description: "Page locale optimisée pour convertir les visiteurs.", minFormula: "starter", available: true },
+  { key: "crm",           label: "Prospects",            description: "Suivi des leads, statuts et relances commerciales.",  minFormula: "starter", available: true },
+  { key: "lead_capture",  label: "Capture de leads",     description: "Formulaires, CTA et tracking des demandes.",          minFormula: "starter", available: true },
+  { key: "acquisition",   label: "Acquisition Ads",      description: "Campagnes Meta / Google et reporting CPL.",          minFormula: "starter", available: true },
+  { key: "loyalty_agent", label: "Fidélisation",         description: "Séquences anniversaire, inactivité et relances.",     minFormula: "business", available: false },
+  { key: "loyalty_card",  label: "Carte fidélité",       description: "Points, paliers et QR code client.",                 minFormula: "business", available: false },
+  { key: "reputation",    label: "Réputation",           description: "Avis, feedback privé et réponses assistées.",        minFormula: "full",     available: false },
+  { key: "phone",         label: "Téléphone IA",         description: "Appels manqués, SMS et agent vocal.",                minFormula: "full",     available: false },
+  { key: "admin",         label: "Documents",            description: "Devis, factures, signatures et relances.",           minFormula: "full",     available: false },
+  { key: "manager",       label: "Manager IA",           description: "Résumé quotidien et coordination des agents.",       minFormula: "full",     available: false },
 ];
 
 export const MODULE_BY_KEY: Record<ModuleKey, ModuleMeta> = Object.fromEntries(

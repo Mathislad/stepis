@@ -1,8 +1,9 @@
-# F5L — Guide de mise en route
+# F5L Acquisition - Guide de mise en route
 
 > Cette doc liste **exactement** ce qu'il faut faire pour mettre F5L en route
-> en local, puis brancher progressivement les APIs réelles. Le code marche
-> sans aucune clé externe — tout est en **stub gracieux**.
+> en local, puis brancher progressivement les APIs réelles. Supabase est la
+> seule dépendance obligatoire pour utiliser le dashboard. Sans Supabase réel,
+> l'app affiche `/setup` au lieu de crasher.
 
 ---
 
@@ -19,8 +20,9 @@
 ### 1.2 — Configurer `.env.local`
 ```bash
 cp .env.example .env.local
-# Éditer .env.local et remplir les 3 variables Supabase + CRON_SECRET.
-# Les autres peuvent rester vides — l'app fonctionne sans.
+# Les placeholders permettent de démarrer npm run dev.
+# Tant qu'ils ne sont pas remplacés, l'app redirige vers /setup.
+# Remplir les 3 variables Supabase + CRON_SECRET pour utiliser le dashboard.
 ```
 
 ### 1.3 — Appliquer les migrations
@@ -41,6 +43,7 @@ psql "$DATABASE_URL" -f supabase/seed.sql
 npm install
 npm run dev
 # → http://localhost:3000
+# → /setup si Supabase n'est pas encore configuré
 # → Login: owner@demo.f5l / demo1234
 ```
 
@@ -51,8 +54,8 @@ mode démo tant que Stripe n'est pas branché.
 
 ## 2. Branchements optionnels
 
-Tout est en stub gracieux : l'app fonctionne sans ces clés. Brancher au
-fur et à mesure des besoins.
+Tout ce qui n'est pas Supabase est en stub gracieux : l'app fonctionne sans
+ces clés. Brancher au fur et à mesure des besoins.
 
 ### Brevo (envois SMS + e-mails)
 Sans clé → les envois sont loggés en console (`[brevo] BREVO_API_KEY absente`).
@@ -63,18 +66,18 @@ BREVO_SENDER_NAME=F5L
 BREVO_SMS_SENDER=F5L                  # 11 caractères max
 ```
 
-Concerne : capture de lead (notif au commerçant), envoi lien carte fidélité,
-campagnes Agent Fidélisation, relances factures, demandes d'avis.
+Concerne en V1 : notification de nouveau prospect. Les autres usages
+restent prévus pour les modules ultérieurs.
 
-### Anthropic (IA — Manager, génération copy publicitaire)
+### Anthropic (IA - génération copy publicitaire)
 Sans clé → fallback statique (templates simples).
 ```bash
 ANTHROPIC_API_KEY=sk-ant-…
 ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
 ```
 
-Concerne : synthèse quotidienne Manager, génération de textes publicitaires,
-ébauches de réponses aux avis Google.
+Concerne en V1 : génération de textes publicitaires. Les autres usages
+restent prévus pour les modules ultérieurs.
 
 ### Stripe (facturation réelle)
 Sans clé → les changements de formule s'appliquent en mode démo (état
@@ -92,7 +95,7 @@ fonctions par des appels au SDK officiel ; `app/api/webhooks/stripe/route.ts`
 — vérifier la signature et router selon `event.type`.
 
 ### Vapi (téléphonie IA)
-Stub — sans clé, le module Téléphone fonctionne en lecture seulement.
+Stub — module non prioritaire en V1.
 ```bash
 VAPI_API_KEY=…
 ```
@@ -105,8 +108,7 @@ GOOGLE_ADS_TOKEN=…
 ```
 
 ### Yousign + Pennylane
-Stubs — bouton « Envoyer pour signature » affiche un message tant que
-non configurés.
+Stubs — modules non prioritaires en V1.
 ```bash
 YOUSIGN_API_KEY=…
 PENNYLANE_API_KEY=…
@@ -125,8 +127,9 @@ PENNYLANE_API_KEY=…
 Copier toutes les variables de `.env.local` vers Vercel → Settings →
 Environment Variables, en remplaçant `NEXT_PUBLIC_APP_URL` par l'URL réelle.
 
-### 3.3 — Configurer le cron (Agent Fidélisation)
-Dans `vercel.json` (déjà présent), ajouter ou vérifier :
+### 3.3 — Cron optionnel
+Le cron Agent Fidélisation est conservé dans le code mais non prioritaire en
+V1 Acquisition. Dans `vercel.json` :
 ```json
 {
   "crons": [
@@ -192,6 +195,6 @@ Après seed, l'org **Boulangerie Démo** est prête :
 - Site public : `/p/boulangerie-demo`
 - Carte fidélité publique : `/carte/demo-card-token`
 - Formule : `business`
-- Modules activés : site, crm, lead_capture, loyalty_card, loyalty_agent,
-  manager + phone, acquisition, admin (ajoutés en Phase 1 du travail
-  autonome).
+- Modules actifs V1 : site, crm, lead_capture, acquisition.
+- Modules visibles comme bientôt disponible : fidélisation, téléphone IA,
+  réputation, carte fidélité, documents, manager IA.

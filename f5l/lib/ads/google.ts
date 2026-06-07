@@ -5,15 +5,18 @@ export interface AdsResult {
   message: string;
 }
 
-export async function createCampaign(_input: unknown): Promise<AdsResult> {
+export async function createCampaign(input: unknown): Promise<AdsResult> {
+  void input;
   if (!process.env.GOOGLE_ADS_TOKEN) return { configured: false, message: "Google Ads non configuré." };
   return { configured: false, message: "Intégration Google Ads à finaliser." };
 }
-export async function pauseCampaign(_id: string): Promise<AdsResult> {
+export async function pauseCampaign(id: string): Promise<AdsResult> {
+  void id;
   if (!process.env.GOOGLE_ADS_TOKEN) return { configured: false, message: "Google Ads non configuré." };
   return { configured: false, message: "Intégration Google Ads à finaliser." };
 }
-export async function getCampaignMetrics(_id: string): Promise<AdsResult> {
+export async function getCampaignMetrics(id: string): Promise<AdsResult> {
+  void id;
   if (!process.env.GOOGLE_ADS_TOKEN) return { configured: false, message: "Google Ads non configuré." };
   return { configured: false, message: "Intégration Google Ads à finaliser." };
 }

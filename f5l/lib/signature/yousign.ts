@@ -6,7 +6,8 @@ export interface SignatureResult {
   signature_url?: string;
 }
 
-export async function createSignatureRequest(_documentId: string): Promise<SignatureResult> {
+export async function createSignatureRequest(documentId: string): Promise<SignatureResult> {
+  void documentId;
   if (!process.env.YOUSIGN_API_KEY) {
     return { configured: false, message: "Yousign non configuré." };
   }

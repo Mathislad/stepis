@@ -5,7 +5,8 @@ export interface AccountingResult {
   message: string;
 }
 
-export async function syncDocument(_documentId: string): Promise<AccountingResult> {
+export async function syncDocument(documentId: string): Promise<AccountingResult> {
+  void documentId;
   if (!process.env.PENNYLANE_API_KEY) {
     return { configured: false, message: "Pennylane non configuré." };
   }
